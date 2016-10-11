@@ -4,73 +4,70 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 分页
- */
 public class Pagination<T> extends BaseVO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private int pageNo = 1;
+    private int pageNo = 1;
 
-	private int totalPage = 1;
+    private int pageSize = 10;
 
-	private int pageSize = 10;
+    private int pageCount = 1;
 
-	private int recordCount = 0;
+    private int itemCount = 0;
 
-	private List<T> recordList = new ArrayList<T>();
+    private List<T> itemList = new ArrayList<T>();
 
-	public Pagination() {
-	}
+    public Pagination() {
+    }
 
-	public Pagination(int pageNo, int totalPage, int pageSize, int recordCount,
-			List<T> recordList) {
-		this.pageNo = pageNo;
-		this.totalPage = totalPage;
-		this.pageSize = pageSize;
-		this.recordCount = recordCount;
-		this.recordList = recordList;
-	}
+    public Pagination(int pageNo, int pageSize, int pageCount, int itemCount,
+            List<T> itemList) {
+        this.pageNo = pageNo;
+        this.pageSize = pageSize;
+        this.pageCount = pageCount;
+        this.itemCount = itemCount;
+        this.itemList = itemList;
+    }
 
-	public int getTotalPage() {
-		return totalPage;
-	}
+    public int getPageNo() {
+        return pageNo;
+    }
 
-	public void setTotalPage(int totalPage) {
-		this.totalPage = totalPage;
-	}
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
 
-	public int getPageSize() {
-		return pageSize;
-	}
+    public int getPageSize() {
+        return pageSize;
+    }
 
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
-	public int getRecordCount() {
-		return recordCount;
-	}
+    public int getPageCount() {
+        return pageCount;
+    }
 
-	public void setRecordCount(int recordCount) {
-		this.recordCount = recordCount;
-	}
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
 
-	public List<T> getRecordList() {
-		return recordList;
-	}
+    public int getItemCount() {
+        return itemCount;
+    }
 
-	public void setRecordList(List<T> recordList) {
-		this.recordList = recordList;
-	}
+    public void setItemCount(int itemCount) {
+        this.itemCount = itemCount;
+    }
 
-	public int getPageNo() {
-		return pageNo;
-	}
+    public List<T> getItemList() {
+        return itemList;
+    }
 
-	public void setPageNo(int pageNo) {
-		this.pageNo = pageNo;
-	}
+    public void setItemList(List<T> itemList) {
+        this.itemList = itemList;
+    }
 
 }

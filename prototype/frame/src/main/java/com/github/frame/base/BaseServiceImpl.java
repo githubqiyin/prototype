@@ -5,126 +5,97 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.log4j.Logger;
 
 public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
-	private static Logger logger = Logger.getLogger(BaseServiceImpl.class);
+    @Override
+    public Pagination<T> doPage(T t, Pagination<T> p) {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Pagination<T> doSearch(T t) {
+        int itemCount = getBaseDAO().selectCount(t);
 
-		logger.info("查询列表操作：" + getInfo(t));
+        List<T> itemList = itemCount == 0 ? new ArrayList<T>() : getBaseDAO().selectPage(t, new RowBounds(p.getPageSize(), (p.getPageNo() - 1) * p.getPageSize()));
 
-		if (!(t != null && t instanceof Pagination)) {
-			return new Pagination<T>();
-		}
+        p.setItemCount(itemCount);
+        p.setItemList(itemList);
+        p.setPageCount((itemCount + p.getPageSize() - 1) / p.getPageSize());
 
-		Pagination<T> p = (Pagination<T>) t;
+        return p;
+    }
 
-		// 查询总数
-		int recordCount = getBaseDAO().selectForCount(t);
+    @Override
+    public List<T> doSearch() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-		// 查询列表
-		List<T> recordList = new ArrayList<T>();
-		if (recordCount != 0) {
-			recordList = getBaseDAO().selectForList(
-					t,
-					new RowBounds(p.getPageSize(), (p.getPageNo() - 1)
-							* p.getPageSize()));
-		}
+    @Override
+    public int doSave(T t) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-		// 组装分页
-		int currentPage = ((Pagination<T>) t).getPageNo();
-		int totalPage = (recordCount + p.getPageSize() - 1) / p.getPageSize();
-		int pageSize = p.getPageSize();
+    @Override
+    public int doUpdate(List<T> ts) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-		return new Pagination<T>(currentPage, totalPage, pageSize, recordCount,
-				recordList);
-	}
+    public int doAdd(T t) {
+        logger.info("新增操作：" + getInfo(t));
+        return getBaseDAO().insertByVO(t);
+    }
 
-	@Override
-	public int doCount(T t) {
+    public int doSave(List<T> ts) {
+        logger.info("批量新增操作：" + getInfo(ts));
+        return getBaseDAO().batchInsertByList(ts);
+    }
 
-		logger.info("查询数量操作：" + getInfo(t));
+    public int doDelete(T t) {
+        logger.info("删除操作：" + getInfo(t));
+        return getBaseDAO().deleteByVO(t);
+    }
 
-		// 查询总数
-		return getBaseDAO().selectForCount(t);
-	}
+    public int doUpdate(T t) {
+        logger.info("更新操作：" + getInfo(t));
+        return getBaseDAO().updateByVO(t);
+    }
 
-	@Override
-	public int doAdd(T t) {
-		logger.info("新增操作：" + getInfo(t));
-		return getBaseDAO().insertByVO(t);
-	}
+    public int doBatchUpdate(List<T> ts) {
+        logger.info("批量更新操作：" + getInfo(ts));
+        return getBaseDAO().batchUpdateByList(ts);
+    }
 
-	@Override
-	public int doBatchInsert(List<T> ts) {
-		logger.info("批量新增操作：" + getInfo(ts));
-		return getBaseDAO().batchInsertByList(ts);
-	}
+    public T doFind(T t) {
+        logger.info("查看操作：" + getInfo(t));
+        return getBaseDAO().selectByVO(t);
+    }
 
-	@Override
-	public int doDelete(T t) {
-		logger.info("删除操作：" + getInfo(t));
-		return getBaseDAO().deleteByVO(t);
-	}
+    public List<T> doFindAll() {
+        return doFindAll(null);
+    }
 
-	@Override
-	public int doUpdate(T t) {
-		logger.info("更新操作：" + getInfo(t));
-		return getBaseDAO().updateByVO(t);
-	}
+    public List<T> doFindAll(T t) {
+        logger.info("查询操作：" + getInfo(t));
+        return getBaseDAO().selectForList(t);
+    }
 
-	@Override
-	public int doBatchUpdate(List<T> ts) {
-		logger.info("批量更新操作：" + getInfo(ts));
-		return getBaseDAO().batchUpdateByList(ts);
-	}
+    public List<T> doFindLimit(T t) {
+        if (!(t != null && t instanceof Pagination)) {
+            return new ArrayList<T>();
+        }
+        Pagination<T> p = (Pagination<T>) t;
+        return getBaseDAO().selectForList(t, new RowBounds(p.getPageSize(), (p.getPageNo() - 1) * p.getPageSize()));
+    }
 
-	@Override
-	public T doFind(T t) {
-		logger.info("查看操作：" + getInfo(t));
-		return getBaseDAO().selectByVO(t);
-	}
+    public List<T> doFindLimit() {
+        Pagination<T> t = new Pagination<T>();
+        return getBaseDAO().selectForList(null, new RowBounds(t.getPageSize(), (t.getPageNo() - 1) * t.getPageSize()));
+    }
 
-	@Override
-	public List<T> doFindAll() {
-		return doFindAll(null);
-	}
+    public String getInfo(Object t) {
+        return t == null ? StringUtils.EMPTY : t.toString();
+    }
 
-	@Override
-	public List<T> doFindAll(T t) {
-		logger.info("查询操作：" + getInfo(t));
-		return getBaseDAO().selectForList(t);
-	}
+    public abstract BaseDAO<T> getBaseDAO();
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<T> doFindLimit(T t) {
-		if (!(t != null && t instanceof Pagination)) {
-			return new ArrayList<T>();
-		}
-		Pagination<T> p = (Pagination<T>) t;
-		return getBaseDAO().selectForList(
-				t,
-				new RowBounds(p.getPageSize(), (p.getPageNo() - 1)
-						* p.getPageSize()));
-	}
-
-	@Override
-	public List<T> doFindLimit() {
-		Pagination<T> t = new Pagination<T>();
-		return getBaseDAO().selectForList(
-				null,
-				new RowBounds(t.getPageSize(), (t.getPageNo() - 1)
-						* t.getPageSize()));
-	}
-
-	public String getInfo(Object t) {
-		return t == null ? StringUtils.EMPTY : t.toString();
-	}
-
-	public abstract BaseDAO<T> getBaseDAO();
 }
