@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface BaseService<T> {
 
-    public Pagination<T> doPage(T t, Pagination<T> p);
+    public void doPage(T t, Pagination<T> p);
 
     public T doFind(T t);
 

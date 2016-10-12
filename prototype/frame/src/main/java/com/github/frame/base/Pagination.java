@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pagination<T> extends BaseVO implements Serializable {
+public class Pagination<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,8 +21,7 @@ public class Pagination<T> extends BaseVO implements Serializable {
     public Pagination() {
     }
 
-    public Pagination(int pageNo, int pageSize, int pageCount, int itemCount,
-            List<T> itemList) {
+    public Pagination(int pageNo, int pageSize, int pageCount, int itemCount, List<T> itemList) {
         this.pageNo = pageNo;
         this.pageSize = pageSize;
         this.pageCount = pageCount;
