@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-4.1.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- 配置加载 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath*:db.properties" />
+
+    <!-- 组件加载 -->
+    <context:annotation-config />
+    <context:component-scan base-package="com.github">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+        <context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect" />
+    </context:component-scan>
+
+    <!-- 数据库管理 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+
+        <!-- 数据库 -->
+        <property name="driverClassName" value="${yh.driver}" />
+        <property name="url" value="${yh.url}" />
+        <property name="username" value="${yh.username}" />
+        <property name="password" value="${yh.password}" />
+
+        <!-- 连接池 -->
+        <property name="initialSize" value="${yh.initialSize}" />
+        <property name="minIdle" value="${yh.minIdle}" />
+        <property name="maxActive" value="${yh.maxActive}" />
+        <property name="maxWait" value="${yh.maxWait}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${yh.timeBetweenEvictionRunsMillis}" />
+        <property name="minEvictableIdleTimeMillis" value="${yh.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="${yh.testWhileIdle}" />
+        <property name="testOnBorrow" value="${yh.testOnBorrow}" />
+        <property name="testOnReturn" value="${yh.testOnReturn}" />
+        <property name="poolPreparedStatements" value="${yh.poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${yh.maxPoolPreparedStatementPerConnectionSize}" />
+
+        <!-- 监控 -->
+        <property name="filters" value="${yh.filters}" />
+    </bean>
+
+    <!-- 数据源管理 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:spring-mybatis.xml" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.yihui.*.**.dao"></property>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+    <!-- 事务管理 -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="do*" propagation="REQUIRED" />
+            <tx:method name="*" propagation="SUPPORTS" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 切面管理 -->
+    <aop:aspectj-autoproxy expose-proxy="true" />
+    <aop:config expose-proxy="true">
+        <aop:advisor pointcut="execution(* *..service.impl.*.*(..))" advice-ref="txAdvice" />
+    </aop:config>
+
+    <bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="schedulerContextAsMap">
+            <map>
+                <!-- 注入容器管理的Service -->
+                <description>schedulerContextAsMap</description>
+            </map>
+        </property>
+        <property name="autoStartup" value="false" />
+        <property name="applicationContextSchedulerContextKey" value="applicationContext" />
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.scheduler.instanceName">CRMscheduler</prop>
+                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+                <!-- 线程池配置 -->
+                <prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+                <prop key="org.quartz.threadPool.threadCount">20</prop>
+                <prop key="org.quartz.threadPool.threadPriority">5</prop>
+                <prop key="org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread">true</prop>
+                <prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
+                <prop key="org.quartz.jobStore.misfireThreshold">60000</prop>
+                <prop key="org.quartz.jobStore.isClustered">true</prop>
+                <prop key="org.quartz.jobStore.clusterCheckinInterval">60000</prop>
+                <prop key="org.quartz.jobStore.maxMisfiresToHandleAtATime">1</prop>
+                <prop key="org.quartz.jobStore.tablePrefix">qrtz_</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- memcache缓存 <import resource="spring-memcached.xml" /> -->
+</beans>
