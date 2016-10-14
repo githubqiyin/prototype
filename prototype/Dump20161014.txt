@@ -1,0 +1,2975 @@
+-- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
+--
+-- Host: 192.168.1.125    Database: qulingou1
+-- ------------------------------------------------------
+-- Server version	5.6.31
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `qlg_agent`
+--
+
+DROP TABLE IF EXISTS `qlg_agent`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_agent` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '名称',
+  `PARENT_ID` bigint(11) NOT NULL DEFAULT '0' COMMENT '归属上级代理点',
+  `RECEIVE_SCHEDULE_GROUP_ID` bigint(11) DEFAULT NULL COMMENT '收货时间组ID',
+  `TYPE` varchar(8) DEFAULT 'A' COMMENT '类型 S 面向客户的代理点  A 各级经销商',
+  `POSTCODE` varchar(8) DEFAULT NULL COMMENT '邮编',
+  `COUNTRY` varchar(32) DEFAULT '中国' COMMENT '国家',
+  `AREACODE` varchar(8) DEFAULT NULL COMMENT '市',
+  `DISTRICT` varchar(2048) DEFAULT NULL COMMENT '省市县区域',
+  `STREET` varchar(2048) DEFAULT NULL COMMENT '街道小区',
+  `ADDRESS` text COMMENT '详细地址',
+  `LATITUDE` decimal(12,8) DEFAULT NULL COMMENT '纬度',
+  `LONGITUDE` decimal(12,8) DEFAULT NULL COMMENT '经度',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  `CLOSED` char(1) DEFAULT NULL COMMENT '休息中：Y；营业中：N；',
+  `CLOSED_TIME` timestamp NULL DEFAULT NULL COMMENT '停用时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_agent_category`
+--
+
+DROP TABLE IF EXISTS `qlg_agent_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_agent_category` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '归属代理点主键',
+  `CATEGORY_ID` bigint(11) NOT NULL COMMENT '归属分类主键',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_agent_community`
+--
+
+DROP TABLE IF EXISTS `qlg_agent_community`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_agent_community` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `COMMUNITY_ID` bigint(11) NOT NULL COMMENT '小区主键',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_agent_schedule`
+--
+
+DROP TABLE IF EXISTS `qlg_agent_schedule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_agent_schedule` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `STATE` char(2) NOT NULL COMMENT '状态  10：待执行； 20：已执行。\n',
+  `SCHEDULE_TIME` timestamp NULL DEFAULT NULL COMMENT '计划时间',
+  `SCHEDULE_ACTION` char(2) DEFAULT NULL COMMENT '计划动作：C：关闭；O：打开；',
+  `EXECUTE_TIME` timestamp NULL DEFAULT NULL COMMENT '执行时间',
+  `EXECUTE_RESULT` char(2) DEFAULT NULL COMMENT '执行结果：S：成功；F：失败；',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_agent_store`
+--
+
+DROP TABLE IF EXISTS `qlg_agent_store`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_agent_store` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '归属代理点主键',
+  `STORE_ID` bigint(11) NOT NULL COMMENT '归属分类主键',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_box_install`
+--
+
+DROP TABLE IF EXISTS `qlg_box_install`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_box_install` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `STATE` char(2) NOT NULL COMMENT '状态  10：待确认；20：已确认，可弹框填写备注 ； 30：已安装，可弹框填写备注、安装者、押金状态、安装照片  ；40：取消安装； 50：已退款，可弹框填写备注、退款者、押金状态、退款照片',
+  `ORDER_ID` bigint(11) NOT NULL COMMENT '订单号',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) NOT NULL COMMENT '代理点名称',
+  `CUSOTMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `CUSTOMER_ADDRESS_ID` bigint(11) NOT NULL COMMENT '用户收货地址主键',
+  `COMMUNITY_ID` bigint(11) NOT NULL,
+  `INSTALL_OPERATOR` varchar(256) DEFAULT NULL COMMENT '安装者名称',
+  `DEPOSIT_STATE` varchar(256) DEFAULT NULL COMMENT '押金状态',
+  `REFUND_OPERATOR` varchar(256) DEFAULT NULL COMMENT '退款者名称',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_box_install_image`
+--
+
+DROP TABLE IF EXISTS `qlg_box_install_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_box_install_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `BOX_INSTALL_ID` bigint(11) NOT NULL COMMENT '二手物品主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：I：安装照片 D：退押金照片 ',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_brand`
+--
+
+DROP TABLE IF EXISTS `qlg_brand`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_brand` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `CN_NAME` varchar(256) DEFAULT NULL COMMENT '中文名称',
+  `US_NAME` varchar(256) DEFAULT NULL COMMENT '英文名称',
+  `CODE` varchar(256) DEFAULT NULL COMMENT '编码',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_category`
+--
+
+DROP TABLE IF EXISTS `qlg_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_category` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PARENT_ID` bigint(11) NOT NULL DEFAULT '0' COMMENT '归属分类主键',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '名称',
+  `CODE` varchar(256) DEFAULT NULL COMMENT '编码',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `HOT` char(1) NOT NULL DEFAULT 'N' COMMENT '是否热销',
+  `LEVEL` char(1) NOT NULL DEFAULT 'Y' COMMENT '分类级数',
+  `ENABLED` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否启用',
+  `PURCHASE_FACTOR` decimal(4,2) DEFAULT '1.00' COMMENT '补货系数',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_category_image`
+--
+
+DROP TABLE IF EXISTS `qlg_category_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_category_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `CATEGORY_ID` bigint(11) NOT NULL COMMENT '分类主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：T 树形结构图 L LOG图',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_charge`
+--
+
+DROP TABLE IF EXISTS `qlg_charge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_charge` (
+  `ID` varchar(64) NOT NULL COMMENT 'PING++订单主键',
+  `ORDER_NO` varchar(64) DEFAULT NULL COMMENT '订单号',
+  `AMOUNT` int(11) DEFAULT '0' COMMENT '金额 单位分',
+  `AMOUNT_SETTLE` int(11) DEFAULT '0' COMMENT '结算金额 单位分',
+  `AMOUNT_REFUNDED` int(11) DEFAULT '0' COMMENT '退款金额 单位分',
+  `CURRENCY` varchar(16) DEFAULT NULL COMMENT '货币类型 CNY：人民币',
+  `CHANNEL` varchar(64) DEFAULT NULL COMMENT '支付渠道 微信：WX_PUB；支付宝：ALIPAY ',
+  `LIVEMODE` tinyint(1) DEFAULT NULL COMMENT '商用模式 0：测试；1：商用',
+  `PAID` tinyint(1) DEFAULT NULL COMMENT '支付状态 0：未支付；1：已支付',
+  `REFUNDED` tinyint(1) DEFAULT NULL COMMENT '退款状态 0：未退款；1：已退款',
+  `SUBJECT` text COMMENT '支付主题',
+  `BODY` text COMMENT '支付内容',
+  `DESCRIPTION` text COMMENT '描述',
+  `CREATED` int(11) DEFAULT NULL COMMENT '创建时间',
+  `TIME_EXPIRE` int(11) DEFAULT NULL COMMENT '超时时间',
+  `OBJECT` varchar(64) DEFAULT NULL COMMENT '类型',
+  `APP` varchar(64) DEFAULT NULL COMMENT 'APP编码',
+  `CLIENT_IP` varchar(16) DEFAULT NULL COMMENT 'IP地址',
+  `CREDENTIAL_MESSAGE` text COMMENT '凭证信息',
+  `REFUNDS_MESSAGE` text COMMENT '退款信息',
+  `EXTRA_MESSAGE` text COMMENT '扩展信息',
+  `METADATA_MESSAGE` text COMMENT 'XX信息',
+  `WHOLE_MESSAGE` text COMMENT '原信息',
+  `DELETED` char(1) DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_chatmessage`
+--
+
+DROP TABLE IF EXISTS `qlg_chatmessage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_chatmessage` (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `UUID` varchar(255) NOT NULL COMMENT 'uuid',
+  `MSG_ID` varchar(255) NOT NULL COMMENT '消息id',
+  `CHAT_TYPE` varchar(255) NOT NULL COMMENT '聊天类型',
+  `GROUP_ID` varchar(255) DEFAULT NULL COMMENT '群组id',
+  `FROM_USER` varchar(255) NOT NULL COMMENT '发送人',
+  `TO_USER` varchar(255) NOT NULL COMMENT '接收人',
+  `MSG_TIME` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '消息入库时间',
+  `CREATED` timestamp NULL DEFAULT NULL COMMENT '消息创建世界',
+  `MODIFIED` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '消息修改时间',
+  `DELETED` char(1) DEFAULT NULL COMMENT '删除',
+  `CREATE_USER` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_USER` bigint(20) DEFAULT NULL COMMENT '修改人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '修改时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_chatmessage_body`
+--
+
+DROP TABLE IF EXISTS `qlg_chatmessage_body`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_chatmessage_body` (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `MSG_ID` varchar(255) NOT NULL COMMENT '消息id',
+  `TYPE` varchar(255) DEFAULT NULL COMMENT '消息类型',
+  `MSG` varchar(255) DEFAULT NULL COMMENT '消息内容',
+  `FILE_LENGTH` int(11) DEFAULT NULL COMMENT '文件长度',
+  `FILE_SIZE` int(11) DEFAULT NULL COMMENT '文件大小',
+  `FILENAME` varchar(255) DEFAULT NULL COMMENT '文件名字',
+  `URL` varchar(255) DEFAULT NULL COMMENT '文件地址',
+  `SECRECT` varchar(255) DEFAULT NULL COMMENT '文件验证密码',
+  `THUMB` varchar(255) DEFAULT NULL COMMENT '缩略图地址',
+  `THUMB_SECRECT` varchar(255) DEFAULT NULL COMMENT '缩略图验证密码',
+  `LAT` double DEFAULT NULL COMMENT '纬度',
+  `LNG` double DEFAULT NULL COMMENT '经度',
+  `ADDR` varchar(255) DEFAULT NULL COMMENT '地址',
+  `EXT` varchar(255) DEFAULT NULL COMMENT '附加信息',
+  `DELETED` char(1) DEFAULT NULL COMMENT '删除',
+  `CREATE_USER` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_USER` bigint(20) DEFAULT NULL COMMENT '修改人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '修改时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_collection`
+--
+
+DROP TABLE IF EXISTS `qlg_collection`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_collection` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `BRAND_ID` bigint(11) DEFAULT NULL COMMENT '归属品牌主键',
+  `BRAND_NAME` varchar(256) DEFAULT NULL COMMENT '品牌中文名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `CUSTOMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `ORDERBY` int(11) NOT NULL COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_comment`
+--
+
+DROP TABLE IF EXISTS `qlg_comment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_comment` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `TYPE` char(2) DEFAULT NULL COMMENT '意见类型',
+  `CONTENT` text COMMENT '意见反馈内容',
+  `CUSTOMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `STATE` char(2) DEFAULT NULL COMMENT '状态',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_community`
+--
+
+DROP TABLE IF EXISTS `qlg_community`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_community` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AREACODE` varchar(8) DEFAULT NULL COMMENT '国家-省-市-区AREACODE',
+  `STREET` varchar(2048) DEFAULT NULL COMMENT '街道小区',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '小区名称',
+  `LATITUDE` decimal(12,8) DEFAULT NULL COMMENT '纬度',
+  `LONGITUDE` decimal(12,8) DEFAULT NULL COMMENT '经度',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_converge`
+--
+
+DROP TABLE IF EXISTS `qlg_converge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_converge` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) DEFAULT NULL COMMENT '归属代理点主键',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '名称',
+  `CODE` varchar(256) DEFAULT NULL COMMENT '编码',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `ENABLED` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否启用',
+  `RAISE` char(1) DEFAULT NULL COMMENT '是否凑单',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='首页展示的聚合商品的栏目';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_converge_goods`
+--
+
+DROP TABLE IF EXISTS `qlg_converge_goods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_converge_goods` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `CONVERGE_ID` bigint(11) NOT NULL COMMENT '主键',
+  `GOODS_ID` bigint(11) NOT NULL COMMENT '商品主键（套餐包ID、产品ID）',
+  `GOODS_TYPE` char(1) NOT NULL COMMENT '商品类型（套餐包：K、产品：P）',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_converge_image`
+--
+
+DROP TABLE IF EXISTS `qlg_converge_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_converge_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `CONVERGE_ID` bigint(11) NOT NULL COMMENT '聚合主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：L LOG图',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_coupon`
+--
+
+DROP TABLE IF EXISTS `qlg_coupon`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_coupon` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `TYPE` char(2) NOT NULL COMMENT 'C：优惠券',
+  `STATE` char(2) NOT NULL COMMENT '状态：未使用 1；已使用 2；已过期 3；',
+  `CUSOTMER_ID` bigint(11) DEFAULT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) DEFAULT NULL COMMENT '用户登录名',
+  `VALID_AMOUNT` decimal(9,2) DEFAULT '0.00' COMMENT '红包金额',
+  `LIMIT_AMOUNT` decimal(9,2) DEFAULT '0.00' COMMENT '满XX可用',
+  `VALID_TIME` date DEFAULT NULL COMMENT '有效期',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_coupon_calculation`
+--
+
+DROP TABLE IF EXISTS `qlg_coupon_calculation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_coupon_calculation` (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `RATE` decimal(9,0) DEFAULT NULL COMMENT '优惠概率',
+  `AMOUNT` decimal(9,2) DEFAULT NULL COMMENT '优惠金额',
+  `DELETED` char(1) CHARACTER SET latin1 DEFAULT 'N' COMMENT '删除',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '修改人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_customer_account`
+--
+
+DROP TABLE IF EXISTS `qlg_customer_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_customer_account` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `OPEN_ID` varchar(128) DEFAULT NULL,
+  `OPEN_TOKEN` char(128) DEFAULT NULL,
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `LOGIN_PASSWORD` varchar(64) DEFAULT NULL COMMENT '登录密码',
+  `TRADER_PASSWORD` varchar(64) DEFAULT NULL COMMENT '交易密码',
+  `CHAT_PASSWORD` varchar(64) DEFAULT NULL,
+  `SALT` varchar(128) DEFAULT NULL COMMENT '盐',
+  `TERMINAL_TYPE` char(1) DEFAULT NULL COMMENT '终端类型',
+  `TERMINAL_CODE` varchar(64) DEFAULT NULL COMMENT '终端设备号',
+  `PUSHABLE` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否推送',
+  `ENABLED` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否启用',
+  `SUSPEND_TIME` timestamp NULL DEFAULT NULL COMMENT '锁定时间',
+  `LAST_LOGIN_TIME` timestamp NULL DEFAULT NULL COMMENT '上次登录时间',
+  `LAST_LOGIN_IP` varchar(64) DEFAULT NULL COMMENT '上次登录IP',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `LOGIN_NAME` (`LOGIN_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_customer_address`
+--
+
+DROP TABLE IF EXISTS `qlg_customer_address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_customer_address` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `CUSTOMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `CONSIGNEE` varchar(128) DEFAULT NULL COMMENT '收件人',
+  `SEX` char(1) DEFAULT NULL COMMENT '性别',
+  `TELEPHONE` varchar(32) DEFAULT NULL COMMENT '固定电话',
+  `MOBILE` varchar(16) DEFAULT NULL COMMENT '手机号',
+  `POSTCODE` varchar(8) DEFAULT NULL COMMENT '邮编',
+  `COUNTRY` varchar(32) DEFAULT '中国' COMMENT '国家',
+  `AREACODE` varchar(8) DEFAULT NULL COMMENT '市',
+  `DISTRICT` varchar(2048) DEFAULT NULL COMMENT '省市县区域',
+  `COMMUNITY_ID` bigint(11) DEFAULT NULL,
+  `COMMUNITY_DISTRICT` varchar(256) DEFAULT NULL,
+  `COMMUNITY_STREET` varchar(1024) DEFAULT NULL,
+  `COMMUNITY_NAME` varchar(256) DEFAULT NULL,
+  `ADDRESS` text COMMENT '详细地址',
+  `LATITUDE` decimal(12,8) DEFAULT NULL COMMENT '纬度',
+  `LONGITUDE` decimal(12,8) DEFAULT NULL COMMENT '经度',
+  `IS_DEFAULT` char(1) NOT NULL DEFAULT 'N' COMMENT '是否默认',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  `STREET` varchar(2048) DEFAULT NULL COMMENT '街道小区 废弃',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_customer_image`
+--
+
+DROP TABLE IF EXISTS `qlg_customer_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_customer_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `CUSTOMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：H 头像 C 名片',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_customer_info`
+--
+
+DROP TABLE IF EXISTS `qlg_customer_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_customer_info` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `CUSTOMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `NICKNAME` varchar(128) DEFAULT NULL COMMENT '昵称',
+  `FULLNAME` varchar(128) DEFAULT NULL COMMENT '真实姓名',
+  `SEX` char(1) DEFAULT NULL COMMENT '性别',
+  `AGE` char(3) DEFAULT NULL COMMENT '年龄',
+  `BIRTHDAY` date DEFAULT NULL COMMENT '生日',
+  `ID_NO` varchar(64) DEFAULT NULL COMMENT '身份证号码',
+  `GRADE` int(11) DEFAULT NULL COMMENT '等级',
+  `SCORE` int(11) DEFAULT NULL COMMENT '积分',
+  `MOBILE` varchar(16) DEFAULT NULL COMMENT '手机号',
+  `EMAIL` varchar(128) DEFAULT NULL COMMENT '邮箱',
+  `INVITE_CODE` varchar(128) DEFAULT NULL COMMENT '邀请码',
+  `INVITED_CUSTOMER_ID` bigint(11) DEFAULT NULL COMMENT '邀请人',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_daily_purchase_report`
+--
+
+DROP TABLE IF EXISTS `qlg_daily_purchase_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_daily_purchase_report` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `DAY` char(10) NOT NULL COMMENT '日期',
+  `DAILY_REPORT_ID` bigint(11) NOT NULL COMMENT '日报主键',
+  `STORE_ID` bigint(11) DEFAULT NULL,
+  `STORE_NAME` varchar(256) DEFAULT NULL,
+  `STORE_TYPE` varchar(8) DEFAULT NULL,
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '进货金额',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_daily_report`
+--
+
+DROP TABLE IF EXISTS `qlg_daily_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_daily_report` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `DAY` char(10) NOT NULL COMMENT '日期',
+  `TOTAL_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '总计金额（套餐金额+商品金额）',
+  `PAYMENT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '支付金额（TOTAL_AMOUNT + FREIGHT_FEE + PACKAGE_FEE - COUPON_AMOUNT）',
+  `COUPON_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '优惠券金额',
+  `PRODUCT_DISCOUNT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '产品折扣金额',
+  `RANDOM_DISCOUNT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '随机立减金额',
+  `FREIGHT_FEE` decimal(11,2) DEFAULT '0.00' COMMENT '运费费',
+  `PACKAGE_FEE` decimal(11,2) DEFAULT '0.00' COMMENT '包装费',
+  `ORDER_QUANTITY` int(11) DEFAULT '0' COMMENT '订单数量=INCOME_ORDER_QUANTITY + REFUND_ORDER_QUANTITY',
+  `INCOME_ORDER_QUANTITY` int(11) DEFAULT '0' COMMENT '成交订单数量 40状态的订单数量',
+  `REFUND_ORDER_QUANTITY` int(11) DEFAULT '0' COMMENT '退款订单数量 50状态的订单数量',
+  `NEGATIVE_ORDER_QUANTITY` int(11) DEFAULT '0' COMMENT '差评订单数量 只统计40状态的订单数量',
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '进货金额 只统计40状态的订单数量',
+  `REWARD_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '奖励金额',
+  `FINE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '罚金金额',
+  `INCOME_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '不是订单INCOME_AMOUNT值之和  营业金额 = PURCHASE_AMOUNT+REWARD_AMOUNT-FINE_AMOUNT',
+  `SELLER_ID` bigint(20) DEFAULT NULL COMMENT '卖家ID',
+  `LOGIN_NAME` varchar(255) DEFAULT NULL COMMENT '卖家名称',
+  `SELLER_NICKNAME` varchar(128) DEFAULT NULL COMMENT '卖家姓名',
+  `SELLER_ACCOUNT_TYPE` varchar(32) DEFAULT NULL COMMENT '卖家账号类型',
+  `SELLER_ACCOUNT_NO` varchar(32) DEFAULT NULL COMMENT '卖家收款账号',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) NOT NULL COMMENT '代理点名称',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_discount_calculation`
+--
+
+DROP TABLE IF EXISTS `qlg_discount_calculation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_discount_calculation` (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `DISCOUNT_GROUP` char(2) DEFAULT NULL COMMENT '折扣分组',
+  `RATE` decimal(9,0) DEFAULT NULL COMMENT '优惠概率',
+  `AMOUNT` decimal(9,2) DEFAULT NULL COMMENT '优惠金额',
+  `DELETED` char(1) CHARACTER SET latin1 DEFAULT 'N' COMMENT '删除',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '修改人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_expense`
+--
+
+DROP TABLE IF EXISTS `qlg_expense`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_expense` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `TYPE` char(2) DEFAULT NULL COMMENT '项目类型：固定资产：FA 推广费用：PE 运营费用：OE',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '开支项名称',
+  `UNIT` varchar(64) DEFAULT NULL COMMENT '单位',
+  `QUANTITY` int(11) DEFAULT NULL COMMENT '数量',
+  `AMOUNT` decimal(11,2) DEFAULT NULL COMMENT '开支项金额',
+  `APPLY_TIME` timestamp NULL DEFAULT NULL COMMENT '申请时间',
+  `APPLY_USER` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '备注',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_expense_item`
+--
+
+DROP TABLE IF EXISTS `qlg_expense_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_expense_item` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '开支项名称',
+  `UNIT` varchar(64) DEFAULT NULL COMMENT '单位',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_focus`
+--
+
+DROP TABLE IF EXISTS `qlg_focus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_focus` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `TYPE` varchar(256) NOT NULL COMMENT '类型：APP：A；电脑：C',
+  `NAME` varchar(128) DEFAULT NULL COMMENT '名称',
+  `URL` varchar(128) DEFAULT NULL COMMENT '链接',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_hand_product`
+--
+
+DROP TABLE IF EXISTS `qlg_hand_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_hand_product` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `CUSTOMER_ID` bigint(11) DEFAULT NULL COMMENT '用户主键',
+  `NAME` varchar(2048) DEFAULT NULL COMMENT '名称',
+  `PRICE` decimal(11,2) NOT NULL COMMENT '原价',
+  `UNIT` varchar(64) DEFAULT NULL COMMENT '规格',
+  `TYPE` varchar(3) DEFAULT NULL COMMENT '类型 按草图说明',
+  `ENABLED` char(1) NOT NULL DEFAULT 'N' COMMENT '上架 下架',
+  `ENABLED_TIME` timestamp NULL DEFAULT NULL COMMENT '上架时间',
+  `PROPERTY` text COMMENT '属性',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `KEYWORD` varchar(1024) DEFAULT NULL COMMENT '搜索关键字',
+  `COUNTRY` varchar(32) DEFAULT '中国' COMMENT '国家',
+  `AREACODE` varchar(8) DEFAULT NULL COMMENT '市',
+  `DISTRICT` varchar(2048) DEFAULT NULL COMMENT '省市县区域',
+  `STREET` varchar(2048) DEFAULT NULL COMMENT '街道小区',
+  `ADDRESS` text COMMENT '详细地址',
+  `LATITUDE` decimal(12,8) DEFAULT NULL COMMENT '纬度',
+  `LONGITUDE` decimal(12,8) DEFAULT NULL COMMENT '经度',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_hand_product_image`
+--
+
+DROP TABLE IF EXISTS `qlg_hand_product_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_hand_product_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `HAND_PRODUCT_ID` bigint(11) NOT NULL COMMENT '二手物品主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：L LOG图 D 详情图',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_help_center`
+--
+
+DROP TABLE IF EXISTS `qlg_help_center`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_help_center` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `QUEST_NAME` varchar(255) DEFAULT NULL COMMENT '问题名称',
+  `URL` varchar(128) DEFAULT NULL COMMENT '链接',
+  `IS_HOT` char(2) DEFAULT 'N' COMMENT '是否热点',
+  `SHOW_FLAG` char(2) DEFAULT 'N' COMMENT '是否显示',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `READ_TIMES` bigint(11) DEFAULT '0' COMMENT '阅读次数',
+  `DELETED` char(2) DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(10) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_latn`
+--
+
+DROP TABLE IF EXISTS `qlg_latn`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_latn` (
+  `ID` int(11) NOT NULL,
+  `PARENT_ID` int(11) DEFAULT NULL,
+  `AREACODE` varchar(11) DEFAULT NULL,
+  `SHORT_NAME` varchar(255) DEFAULT NULL,
+  `NAME` varchar(255) DEFAULT NULL,
+  `DESCRIPTION` varchar(1204) DEFAULT NULL,
+  `LONGITUDE` double DEFAULT NULL,
+  `LATITUDE` double DEFAULT NULL,
+  `LEVEL` int(11) DEFAULT NULL,
+  `SORT` int(11) DEFAULT NULL,
+  `STATUS` int(11) DEFAULT NULL,
+  `DELETED` char(1) DEFAULT 'N',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL,
+  `CREATE_USER` bigint(20) DEFAULT '1',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL,
+  `UPDATE_USER` bigint(20) DEFAULT '1',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_message`
+--
+
+DROP TABLE IF EXISTS `qlg_message`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_message` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `TYPE` char(2) DEFAULT NULL COMMENT '消息类型 S:系统消息',
+  `CONTENT` text COMMENT '消息内容',
+  `ENABLED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否启用 1',
+  `PUSHED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否推送 2',
+  `PUSH_TIME` timestamp NULL DEFAULT NULL COMMENT '推送时间',
+  `RECEIVE_TYPE` char(1) DEFAULT NULL COMMENT '''C:买家 S：卖家''',
+  `RECEIVE_ID` bigint(11) DEFAULT NULL COMMENT '接收人ID',
+  `RECEIVE_NAME` varchar(32) DEFAULT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` binary(11) DEFAULT NULL COMMENT '更新人',
+  `TITLE` varchar(256) NOT NULL COMMENT '主题',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_monthly_purchase_report`
+--
+
+DROP TABLE IF EXISTS `qlg_monthly_purchase_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_monthly_purchase_report` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `MONTH` char(7) NOT NULL COMMENT '月份',
+  `MONTHLY_REPORT_ID` bigint(11) NOT NULL COMMENT '月报主键',
+  `STORE_ID` bigint(11) DEFAULT NULL,
+  `STORE_NAME` varchar(256) DEFAULT NULL,
+  `STORE_TYPE` varchar(8) DEFAULT NULL,
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '进货金额 上月单日之和',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_monthly_report`
+--
+
+DROP TABLE IF EXISTS `qlg_monthly_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_monthly_report` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `MONTH` char(7) NOT NULL COMMENT '月份',
+  `TOTAL_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '总计金额 上月单日之和',
+  `PAYMENT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '支付金额 上月单日之和',
+  `COUPON_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '优惠券金额 上月单日之和',
+  `PRODUCT_DISCOUNT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '产品折扣金额',
+  `RANDOM_DISCOUNT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '随机立减金额',
+  `FREIGHT_FEE` decimal(11,2) DEFAULT '0.00' COMMENT '运费费 上月单日之和',
+  `PACKAGE_FEE` decimal(11,2) DEFAULT '0.00' COMMENT '包装费 上月单日之和',
+  `ORDER_QUANTITY` int(11) DEFAULT '0' COMMENT '订单数量 上月单日之和',
+  `INCOME_ORDER_QUANTITY` int(11) DEFAULT '0' COMMENT '成交订单数量 上月单日之和',
+  `REFUND_ORDER_QUANTITY` int(11) DEFAULT '0' COMMENT '退款订单数量 上月单日之和',
+  `NEGATIVE_ORDER_QUANTITY` int(11) DEFAULT '0' COMMENT '差评订单数量 上月单日之和',
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '进货金额 上月单日之和',
+  `BASE_REWARD_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '基础奖励金额，不是上月单日之和',
+  `PERFORMANCE_REWARD_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '绩效奖金额，从管理后台输入，由出勤天数、订单评价决定',
+  `INCOME_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '营业金额 上月单日之和',
+  `REVENUE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '总收入 = INCOME_AMOUNT + BASE_REWARD_AMOUNT + PERFORMANCE_REWARD_AMOUNT',
+  `PROFIT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '利润 = REVENUE_AMOUNT - PURCHASE_AMOUNT',
+  `SELLER_ID` bigint(20) DEFAULT NULL COMMENT '卖家ID',
+  `LOGIN_NAME` varchar(255) DEFAULT NULL COMMENT '卖家名称',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) NOT NULL COMMENT '代理点名称',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_notice`
+--
+
+DROP TABLE IF EXISTS `qlg_notice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_notice` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `TITLE` varchar(64) DEFAULT NULL COMMENT '主题',
+  `TYPE` char(2) DEFAULT NULL COMMENT '公告类型',
+  `CONTENT` text COMMENT '内容',
+  `ENABLED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否启用',
+  `VALID_TIME` timestamp NULL DEFAULT NULL COMMENT '有效期',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` binary(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order`
+--
+
+DROP TABLE IF EXISTS `qlg_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `NO` varchar(64) NOT NULL COMMENT '订单号',
+  `STATE` char(2) NOT NULL COMMENT '状态  0：订单取消；10：待支付； 20：待收货 ；30：支付失败； 40：交易完成。\n',
+  `QUANTITY` int(11) NOT NULL COMMENT '总数量',
+  `PAYMENT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '支付金额（TOTAL_AMOUNT + FREIGHT_FEE + PACKAGE_FEE - COUPON_AMOUNT）',
+  `REFUND_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '退款金额',
+  `INCOME_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '卖家收益金额',
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT '0.00',
+  `COUPON_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '优惠券金额',
+  `PRODUCT_DISCOUNT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '商品折扣金额',
+  `RANDOM_DISCOUNT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '随机立减金额',
+  `TOTAL_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '总计金额（套餐金额+商品金额）',
+  `FREIGHT_FEE` decimal(11,2) DEFAULT '0.00' COMMENT '运费费',
+  `PACKAGE_FEE` decimal(11,2) DEFAULT '0.00' COMMENT '包装费',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) NOT NULL COMMENT '代理点名称',
+  `CUSOTMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `CUSTOMER_ADDRESS_ID` bigint(11) NOT NULL COMMENT '用户收货地址主键',
+  `COMMUNITY_ID` bigint(11) DEFAULT NULL,
+  `DISTANCE` decimal(11,2) DEFAULT '0.00' COMMENT '配送距离',
+  `ORDER_TIME` timestamp NULL DEFAULT NULL COMMENT '下单时间',
+  `CANCEL_TIME` timestamp NULL DEFAULT NULL COMMENT '取消时间',
+  `PAYMENT_TIME` timestamp NULL DEFAULT NULL COMMENT '付款时间',
+  `SINGLE_TIME` timestamp NULL DEFAULT NULL COMMENT '接单时间',
+  `DELIVER_TIME` timestamp NULL DEFAULT NULL COMMENT '出货时间',
+  `RECEIVE_TIME` timestamp NULL DEFAULT NULL COMMENT '收货时间',
+  `REFUND_TIME` timestamp NULL DEFAULT NULL COMMENT '退单时间',
+  `RECEIVE_SCHEDULE` varchar(256) DEFAULT NULL COMMENT '预定收货时间',
+  `SCHEDULE_ID` bigint(11) DEFAULT NULL,
+  `SCHEDULE_START` timestamp NULL DEFAULT NULL,
+  `SCHEDULE_END` timestamp NULL DEFAULT NULL,
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `EVALUATED` char(1) DEFAULT NULL COMMENT '是否已评价',
+  `HIDDEN` char(1) DEFAULT 'N' COMMENT '隐藏（用户删除）',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order_coupon`
+--
+
+DROP TABLE IF EXISTS `qlg_order_coupon`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order_coupon` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `ORDER_ID` bigint(11) NOT NULL COMMENT '订单主键',
+  `COUPON_ID` bigint(11) NOT NULL COMMENT '优惠券主键',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order_evaluation`
+--
+
+DROP TABLE IF EXISTS `qlg_order_evaluation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order_evaluation` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `ORDER_ID` bigint(11) DEFAULT NULL COMMENT '订单编号',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) NOT NULL COMMENT '代理点名称',
+  `CUSOTMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `PRODUCT_QUALITY` int(11) NOT NULL COMMENT '产品质量',
+  `DELIVERY_SPEED` int(11) NOT NULL COMMENT '送货速度',
+  `SERVICE_ATTITUDE` int(11) NOT NULL COMMENT '服务态度',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order_pack`
+--
+
+DROP TABLE IF EXISTS `qlg_order_pack`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order_pack` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `ORDER_ID` bigint(11) NOT NULL COMMENT '订单主键',
+  `PACK_ID` bigint(11) NOT NULL COMMENT '套餐主键',
+  `PACK_NAME` varchar(2048) DEFAULT NULL COMMENT '套餐名称',
+  `CUSOTMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `PRICE` decimal(11,2) DEFAULT '0.00' COMMENT '原价（各分组商品AMOUNT之和）',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '总价（ PRICE* QUANTITY ）',
+  `DISCOUNT_RATIO` decimal(3,2) DEFAULT NULL COMMENT '折扣比例',
+  `DISCOUNT_AMOUNT` decimal(11,2) DEFAULT NULL COMMENT '套餐折后价（AMOUNT * DISCOUNT_RATIO）',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order_pack_detail`
+--
+
+DROP TABLE IF EXISTS `qlg_order_pack_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order_pack_detail` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `RELATE_ID` bigint(11) NOT NULL,
+  `ORDER_ID` bigint(11) NOT NULL COMMENT '订单主键',
+  `PACK_ID` bigint(11) NOT NULL COMMENT '套餐主键',
+  `GROUP_ID` bigint(11) DEFAULT NULL COMMENT '分组主键',
+  `GROUP_NAME` varchar(256) DEFAULT NULL COMMENT '分组名称',
+  `BRAND_ID` bigint(11) DEFAULT NULL COMMENT '归属品牌主键',
+  `BRAND_NAME` varchar(256) DEFAULT NULL COMMENT '品牌中文名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `AMOUNT` decimal(11,2) DEFAULT NULL COMMENT 'QUANTITY * PRICE',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `PRICE` decimal(11,2) DEFAULT '0.00' COMMENT '单价',
+  `DELETED` char(1) DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order_product`
+--
+
+DROP TABLE IF EXISTS `qlg_order_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order_product` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `ORDER_ID` bigint(11) NOT NULL COMMENT '订单主键',
+  `STORE_ID` bigint(11) DEFAULT NULL COMMENT '店铺ID',
+  `STORE_NAME` varchar(256) DEFAULT NULL,
+  `STORE_TYPE` varchar(8) DEFAULT NULL COMMENT '店铺类型',
+  `BRAND_ID` bigint(11) DEFAULT NULL COMMENT '归属品牌主键',
+  `BRAND_NAME` varchar(256) DEFAULT NULL COMMENT '品牌中文名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `CUSOTMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) DEFAULT NULL COMMENT '用户名',
+  `AMOUNT` decimal(11,2) DEFAULT NULL COMMENT 'PRICE* QUANTITY',
+  `DISCOUNT_AMOUNT` decimal(11,2) DEFAULT NULL COMMENT 'DISCOUNT* QUANTITY',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `PRICE` decimal(11,2) DEFAULT '0.00' COMMENT '单价',
+  `DISCOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '折后单价',
+  `STORE_PRICE` decimal(11,2) DEFAULT '0.00' COMMENT '店铺价格',
+  `PURCHASE_PRICE` decimal(11,2) DEFAULT '0.00' COMMENT '补货价格',
+  `DELETED` char(1) DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order_refund`
+--
+
+DROP TABLE IF EXISTS `qlg_order_refund`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order_refund` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `ORDER_ID` bigint(11) DEFAULT NULL COMMENT '订单主键',
+  `ORDER_NO` varchar(64) DEFAULT NULL COMMENT '订单号',
+  `STATE` char(2) DEFAULT NULL COMMENT '状态 0：已拒绝；10：待审批； 20：退款中 ； 30：退款完成\n',
+  `TYPE` char(1) DEFAULT NULL COMMENT '类型 F：全部退款； P：部分退款。\n',
+  `SOURCE` char(1) DEFAULT NULL COMMENT '类型 S：系统后台发起； C：用户发起。\n',
+  `APPLY_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '申请金额',
+  `APPLY_REASON` char(2) DEFAULT NULL COMMENT '原因 M：漏送；W：错送； N：未送 ；\n',
+  `AUDIT_USER_ID` bigint(11) DEFAULT NULL COMMENT '审批人ID',
+  `AUDIT_USER_NAME` varchar(32) DEFAULT NULL COMMENT '审批人',
+  `AUDIT_OPINION` varchar(2048) DEFAULT NULL COMMENT '拒绝原因',
+  `REFUND_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '退款金额',
+  `APPLY_TIME` timestamp NULL DEFAULT NULL COMMENT '申请时间 用户申请退款的时间',
+  `AGREE_TIME` timestamp NULL DEFAULT NULL COMMENT '通过时间 点击退款按钮的时间',
+  `REFUND_TIME` timestamp NULL DEFAULT NULL COMMENT '退款时间 收到退款成功回调的时间',
+  `CUSOTMER_ID` bigint(11) DEFAULT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) DEFAULT NULL COMMENT '用户名',
+  `AGENT_ID` bigint(11) DEFAULT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) DEFAULT NULL COMMENT '代理点名称',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `REMARK` varchar(2048) DEFAULT NULL COMMENT '备注',
+  `DELETED` char(1) DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order_refund_image`
+--
+
+DROP TABLE IF EXISTS `qlg_order_refund_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order_refund_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `ORDER_REFUND_ID` bigint(11) NOT NULL COMMENT '订单退款记录主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：W：送错图',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_order_store_settlement`
+--
+
+DROP TABLE IF EXISTS `qlg_order_store_settlement`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_order_store_settlement` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `ORDER_ID` bigint(11) NOT NULL COMMENT '订单主键',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) NOT NULL COMMENT '代理点名称',
+  `STORE_ID` bigint(11) NOT NULL COMMENT '店铺ID',
+  `STORE_NAME` varchar(256) DEFAULT NULL COMMENT '店铺名称',
+  `STORE_TYPE` varchar(8) NOT NULL COMMENT '店铺类型',
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '补货金额',
+  `QUANTITY` int(11) DEFAULT NULL COMMENT '数量',
+  `SETTLEMENT_DATE` date DEFAULT NULL COMMENT '结算日期',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_pack`
+--
+
+DROP TABLE IF EXISTS `qlg_pack`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_pack` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '名称',
+  `CODE` varchar(256) DEFAULT NULL COMMENT '编码',
+  `MIN_PRICE` decimal(11,2) DEFAULT NULL COMMENT '各分组商品最低单价之和',
+  `DISCOUNT_RATIO` decimal(3,2) NOT NULL COMMENT '折扣比例',
+  `HOT` char(1) DEFAULT 'N' COMMENT '热销',
+  `SALES` bigint(11) DEFAULT NULL COMMENT '销量',
+  `ENABLED` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否启用',
+  `ENABLED_TIME` timestamp NULL DEFAULT NULL,
+  `KEYWORD` varchar(1024) DEFAULT NULL COMMENT '搜索关键字',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_pack_group`
+--
+
+DROP TABLE IF EXISTS `qlg_pack_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_pack_group` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PACK_ID` bigint(11) NOT NULL COMMENT '主键',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '名称',
+  `CODE` varchar(256) DEFAULT NULL COMMENT '编码',
+  `LIMITS` int(11) DEFAULT '1' COMMENT '限购数量',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_pack_group_product`
+--
+
+DROP TABLE IF EXISTS `qlg_pack_group_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_pack_group_product` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PACKAGE_ID` bigint(11) NOT NULL COMMENT '归属套餐包分组主键',
+  `GROUP_ID` bigint(11) NOT NULL COMMENT '归属套餐包分组主键',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_pack_image`
+--
+
+DROP TABLE IF EXISTS `qlg_pack_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_pack_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PACK_ID` bigint(11) NOT NULL COMMENT '套餐主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：L LOG图 D 详情图',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_peripheral_service`
+--
+
+DROP TABLE IF EXISTS `qlg_peripheral_service`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_peripheral_service` (
+  `ID` bigint(11) NOT NULL,
+  `NAME` varchar(2048) DEFAULT NULL COMMENT '名称',
+  `PRICE_RANGE` varchar(256) DEFAULT NULL COMMENT '价格区间',
+  `ADDRESS` text COMMENT '地址',
+  `MOBILE` varchar(16) DEFAULT NULL COMMENT '电话',
+  `TYPE` varchar(3) DEFAULT NULL COMMENT '类型',
+  `ENABLED` char(1) NOT NULL DEFAULT 'N' COMMENT '上架',
+  `ENABLED_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '上架时间',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N',
+  `CREATE_TIME` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `CREATE_USER` bigint(11) DEFAULT NULL,
+  `UPDATE_TIME` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `UPDATE_USER` bigint(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_peripheral_service_image`
+--
+
+DROP TABLE IF EXISTS `qlg_peripheral_service_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_peripheral_service_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PERIPHERAL_SERVICE_ID` bigint(11) NOT NULL COMMENT '主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：L LOG图',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_product`
+--
+
+DROP TABLE IF EXISTS `qlg_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_product` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `BRAND_ID` bigint(11) DEFAULT NULL COMMENT '归属品牌主键',
+  `STORE_ID` bigint(11) DEFAULT NULL COMMENT '归属的店铺',
+  `CODE` varchar(256) DEFAULT NULL COMMENT 'HS编码',
+  `NAME` varchar(2048) DEFAULT NULL COMMENT '名称',
+  `STORE_PRICE` decimal(11,2) DEFAULT NULL COMMENT '店内价格',
+  `PRICE` decimal(11,2) NOT NULL COMMENT '原价',
+  `DISCOUNT` decimal(11,2) DEFAULT NULL COMMENT '折后价',
+  `PURCHASE_PRICE` decimal(11,2) DEFAULT NULL COMMENT '采购价',
+  `RECYCLE_RATIO` decimal(3,2) DEFAULT '1.00' COMMENT '回收折扣',
+  `UNIT` varchar(64) DEFAULT NULL COMMENT '单位',
+  `SALES` bigint(11) DEFAULT '0' COMMENT '销量',
+  `HOT` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否热销',
+  `RAISE` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否凑单',
+  `ENABLED` char(1) NOT NULL DEFAULT 'N',
+  `ENABLED_TIME` timestamp NULL DEFAULT NULL,
+  `ONLY_ONE` char(1) DEFAULT NULL COMMENT '每个用户是否只能购买一个',
+  `PROPERTY` text COMMENT '属性',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `KEYWORD` varchar(1024) DEFAULT NULL COMMENT '搜索关键字',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_product_category`
+--
+
+DROP TABLE IF EXISTS `qlg_product_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_product_category` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) DEFAULT NULL,
+  `CATEGORY_ID` bigint(11) NOT NULL COMMENT '归属分类主键',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '归属商品主键',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_product_image`
+--
+
+DROP TABLE IF EXISTS `qlg_product_image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_product_image` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '产品主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：L LOG图 D 详情图',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_product_model`
+--
+
+DROP TABLE IF EXISTS `qlg_product_model`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_product_model` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '归属商品主键',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '名称',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_product_storage`
+--
+
+DROP TABLE IF EXISTS `qlg_product_storage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_product_storage` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '归属代理点主键',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '归属商品主键',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `SALES` bigint(11) DEFAULT '0' COMMENT '销量',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_product_storage_bill`
+--
+
+DROP TABLE IF EXISTS `qlg_product_storage_bill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_product_storage_bill` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '归属代理点主键',
+  `AGENT_NAME` varchar(255) NOT NULL COMMENT '代理点名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '归属商品主键',
+  `PRODUCT_NAME` varchar(255) NOT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(255) DEFAULT NULL COMMENT '商品型号',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `STOCK_IN` char(1) NOT NULL DEFAULT 'N' COMMENT '是否入库',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_purchase_cart`
+--
+
+DROP TABLE IF EXISTS `qlg_purchase_cart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_purchase_cart` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `SELLER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `ADD_TIME` timestamp NULL DEFAULT NULL COMMENT '加入时间',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_purchase_cart_deleted`
+--
+
+DROP TABLE IF EXISTS `qlg_purchase_cart_deleted`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_purchase_cart_deleted` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `SELLER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `ADD_TIME` timestamp NULL DEFAULT NULL COMMENT '加入时间',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_purchase_order`
+--
+
+DROP TABLE IF EXISTS `qlg_purchase_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_purchase_order` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `NO` varchar(64) NOT NULL COMMENT '订单号',
+  `STATE` char(2) NOT NULL COMMENT '状态  0：订单取消；20：待收货 ； 40：交易完成。\n',
+  `QUANTITY` int(11) NOT NULL COMMENT '总数量',
+  `PAYMENT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '支付金额（TOTAL_AMOUNT + FREIGHT_FEE + PACKAGE_FEE）',
+  `REFUND_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '退款金额',
+  `TOTAL_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '总计金额',
+  `FREIGHT_FEE` decimal(11,2) DEFAULT '0.00' COMMENT '运费费',
+  `PACKAGE_FEE` decimal(11,2) DEFAULT '0.00' COMMENT '包装费',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) NOT NULL COMMENT '代理点名称',
+  `SELLER_ID` bigint(11) DEFAULT NULL,
+  `LOGIN_NAME` varchar(32) DEFAULT NULL,
+  `DISTANCE` decimal(11,2) DEFAULT '0.00' COMMENT '配送距离',
+  `ORDER_TIME` timestamp NULL DEFAULT NULL COMMENT '下单时间',
+  `CANCEL_TIME` timestamp NULL DEFAULT NULL COMMENT '取消时间',
+  `SINGLE_TIME` timestamp NULL DEFAULT NULL COMMENT '接单时间',
+  `DELIVER_TIME` timestamp NULL DEFAULT NULL COMMENT '出货时间',
+  `RECEIVE_TIME` timestamp NULL DEFAULT NULL COMMENT '收货时间',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_purchase_order_product`
+--
+
+DROP TABLE IF EXISTS `qlg_purchase_order_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_purchase_order_product` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PURCHASE_ORDER_ID` bigint(11) NOT NULL COMMENT '订单主键',
+  `SELLER_ID` bigint(11) DEFAULT NULL,
+  `LOGIN_NAME` varchar(32) DEFAULT NULL,
+  `BRAND_ID` bigint(11) DEFAULT NULL COMMENT '归属品牌主键',
+  `BRAND_NAME` varchar(256) DEFAULT NULL COMMENT '品牌中文名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT NULL COMMENT 'PURCHASE_PRICE*QUANTITY',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `PURCHASE_PRICE` decimal(11,2) DEFAULT '0.00' COMMENT '采购价',
+  `DELETED` char(1) DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_purchase_order_product_scrap`
+--
+
+DROP TABLE IF EXISTS `qlg_purchase_order_product_scrap`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_purchase_order_product_scrap` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `RELATE_ID` bigint(11) DEFAULT NULL COMMENT '关联qlg_purchase_order_product表主键',
+  `PURCHASE_ORDER_ID` bigint(11) NOT NULL COMMENT '订单主键',
+  `SELLER_ID` bigint(11) DEFAULT NULL,
+  `LOGIN_NAME` varchar(32) DEFAULT NULL,
+  `BRAND_ID` bigint(11) DEFAULT NULL COMMENT '归属品牌主键',
+  `BRAND_NAME` varchar(256) DEFAULT NULL COMMENT '品牌中文名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT NULL COMMENT 'PURCHASE_PRICE*QUANTITY',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `PURCHASE_PRICE` decimal(11,2) DEFAULT '0.00' COMMENT '采购价',
+  `REJECT_REASON` char(1) DEFAULT NULL,
+  `DELETED` char(1) DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_purchase_product_proposal`
+--
+
+DROP TABLE IF EXISTS `qlg_purchase_product_proposal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_purchase_product_proposal` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) NOT NULL COMMENT '归属代理点主键',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '归属商品主键',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `STATE` char(1) DEFAULT NULL COMMENT 'N：新增；U：已加入购物车',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_random_discount`
+--
+
+DROP TABLE IF EXISTS `qlg_random_discount`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_random_discount` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `STATE` char(2) NOT NULL COMMENT '状态：未使用 1；已使用 2；已过期 3；',
+  `CUSOTMER_ID` bigint(11) DEFAULT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) DEFAULT NULL COMMENT '用户登录名',
+  `VALID_AMOUNT` decimal(9,2) DEFAULT '0.00' COMMENT '红包金额',
+  `VALID_TIME` date DEFAULT NULL COMMENT '有效期',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_receive_schedule`
+--
+
+DROP TABLE IF EXISTS `qlg_receive_schedule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_receive_schedule` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `SCHEDULE_GROUP_ID` bigint(11) DEFAULT NULL COMMENT '分组ID',
+  `SCHEDULE_BATCH` int(1) DEFAULT NULL COMMENT '批次',
+  `START_TIME` char(8) NOT NULL COMMENT '起始时间',
+  `END_TIME` char(8) NOT NULL COMMENT '结束时间',
+  `ENABLED` char(1) NOT NULL DEFAULT 'Y',
+  `ORDERBY` int(11) DEFAULT NULL COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_receive_schedule_group`
+--
+
+DROP TABLE IF EXISTS `qlg_receive_schedule_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_receive_schedule_group` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `NAME` varchar(128) NOT NULL COMMENT '名称',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `ORDER_LIMIT_TIME` varchar(16) DEFAULT NULL COMMENT '当天限制下单时间',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_refund`
+--
+
+DROP TABLE IF EXISTS `qlg_refund`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_refund` (
+  `ID` varchar(64) NOT NULL COMMENT 'PING++订单主键',
+  `OBJECT` varchar(64) DEFAULT NULL COMMENT '类型',
+  `ORDER_NO` varchar(64) DEFAULT NULL COMMENT '订单号',
+  `AMOUNT` int(11) DEFAULT '0' COMMENT '金额 单位分',
+  `CREATED` int(11) DEFAULT NULL COMMENT '创建时间',
+  `SUCCEED` tinyint(1) DEFAULT NULL COMMENT '支付状态 0：未支付；1：已支付',
+  `STATUS` varchar(32) DEFAULT NULL COMMENT '状态',
+  `TIME_SUCCEED` int(11) DEFAULT NULL COMMENT '成功时间',
+  `DESCRIPTION` text COMMENT '描述',
+  `FAILURE_CODE` varchar(64) DEFAULT NULL COMMENT '错误码',
+  `FAILURE_MSG` text COMMENT '错误描述',
+  `METADATA_MESSAGE` text COMMENT 'XX信息',
+  `CHARGE` varchar(64) DEFAULT NULL COMMENT '支付凭证',
+  `WHOLE_MESSAGE` text COMMENT '原信息',
+  `DELETED` char(1) DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_search_word`
+--
+
+DROP TABLE IF EXISTS `qlg_search_word`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_search_word` (
+  `ID` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `WORD` varchar(128) DEFAULT NULL COMMENT '搜索关键字',
+  `COUNT` bigint(11) NOT NULL COMMENT '搜索次数',
+  `TYPE` char(2) DEFAULT NULL COMMENT '搜索类型：P：产品',
+  `ISHOT` char(1) NOT NULL DEFAULT 'N' COMMENT '是否热点',
+  KEY `ID` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_seller_account`
+--
+
+DROP TABLE IF EXISTS `qlg_seller_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_seller_account` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `LOGIN_PASSWORD` varchar(64) DEFAULT NULL COMMENT '登录密码',
+  `TRADER_PASSWORD` varchar(64) DEFAULT NULL COMMENT '交易密码',
+  `CHAT_PASSWORD` varchar(64) DEFAULT NULL,
+  `SALT` varchar(128) DEFAULT NULL COMMENT '盐',
+  `TERMINAL_TYPE` char(1) DEFAULT NULL COMMENT '终端类型',
+  `TERMINAL_CODE` varchar(64) DEFAULT NULL COMMENT '终端设备号',
+  `PUSHABLE` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否推送',
+  `ENABLED` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否启用',
+  `SUSPEND_TIME` timestamp NULL DEFAULT NULL COMMENT '锁定时间',
+  `LAST_LOGIN_TIME` timestamp NULL DEFAULT NULL COMMENT '上次登录时间',
+  `LAST_LOGIN_IP` varchar(64) DEFAULT NULL COMMENT '上次登录IP',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `LOGIN_NAME` (`LOGIN_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_seller_appendix`
+--
+
+DROP TABLE IF EXISTS `qlg_seller_appendix`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_seller_appendix` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `SELLER_ID` bigint(11) DEFAULT NULL COMMENT '卖家主键',
+  `SELLER_INFO_ID` bigint(11) NOT NULL COMMENT '卖家信息主键',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `ARCHIVE_TYPE` varchar(256) NOT NULL COMMENT '归档类型：LD MD HD',
+  `IMAGE_TYPE` varchar(128) NOT NULL COMMENT '图片类型：H 头像 L 营业执照 H 卫生许可证 D 食品流通许可证',
+  `PARENT_ID` bigint(11) NOT NULL COMMENT '归属缩略图主键',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_seller_cash`
+--
+
+DROP TABLE IF EXISTS `qlg_seller_cash`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_seller_cash` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `NO` varchar(64) DEFAULT NULL COMMENT '订单号',
+  `SELLER_ID` bigint(20) DEFAULT NULL COMMENT '卖家ID',
+  `LOGIN_NAME` varchar(255) DEFAULT NULL COMMENT '卖家名称',
+  `STATE` char(2) NOT NULL COMMENT '状态  0：已拒绝；10：待审批； 20：待放款 ； 30：交易完成。\n',
+  `AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '提现金额',
+  `CASH_TIME` timestamp NULL DEFAULT NULL COMMENT '提现时间',
+  `CANCEL_TIME` timestamp NULL DEFAULT NULL COMMENT '取消时间',
+  `APPROVE_TIME` timestamp NULL DEFAULT NULL COMMENT '审批时间',
+  `LOAN_TIME` timestamp NULL DEFAULT NULL COMMENT '放款时间',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_seller_info`
+--
+
+DROP TABLE IF EXISTS `qlg_seller_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_seller_info` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `SELLER_ID` bigint(11) DEFAULT NULL COMMENT '用户主键',
+  `NICKNAME` varchar(128) DEFAULT NULL COMMENT '昵称',
+  `FULLNAME` varchar(128) DEFAULT NULL COMMENT '真实姓名',
+  `SEX` char(1) DEFAULT NULL COMMENT '性别',
+  `AGE` char(3) DEFAULT NULL COMMENT '年龄',
+  `AGENT_ID` bigint(11) DEFAULT NULL COMMENT '代理点',
+  `AGENT_NAME` varchar(255) DEFAULT NULL,
+  `BIRTHDAY` date DEFAULT NULL COMMENT '生日',
+  `ID_NO` varchar(64) DEFAULT NULL COMMENT '身份证号码',
+  `ACCOUNT_TYPE` varchar(32) DEFAULT NULL COMMENT '账号类型 支付宝：alipay',
+  `ACCOUNT_NO` varchar(32) DEFAULT NULL COMMENT '账号',
+  `SALE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '销售金额',
+  `FREEZE_AMOUNT` decimal(11,2) DEFAULT '0.00',
+  `PURCHASE_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '补货金额',
+  `GRADE` int(11) DEFAULT NULL COMMENT '等级',
+  `SCORE` int(11) DEFAULT NULL COMMENT '积分',
+  `MOBILE` varchar(16) DEFAULT NULL COMMENT '手机号',
+  `EMAIL` varchar(128) DEFAULT NULL COMMENT '邮箱',
+  `LICENSE_CODE` varchar(16) DEFAULT NULL COMMENT '授权码',
+  `CREDIT_AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '信用额度',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  `INCOME_RATIO` decimal(3,2) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_seller_recharge`
+--
+
+DROP TABLE IF EXISTS `qlg_seller_recharge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_seller_recharge` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `SELLER_ID` bigint(20) DEFAULT NULL COMMENT '卖家ID',
+  `LOGIN_NAME` varchar(255) DEFAULT NULL COMMENT '卖家名称',
+  `NO` varchar(64) NOT NULL COMMENT '订单号',
+  `STATE` char(2) NOT NULL COMMENT '状态 10：待支付； 20：支付失败； 30：交易完成。',
+  `AMOUNT` decimal(11,2) DEFAULT '0.00' COMMENT '充值金额',
+  `RECHARGE_TIME` timestamp NULL DEFAULT NULL COMMENT '充值时间',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_shopping_cart_pack`
+--
+
+DROP TABLE IF EXISTS `qlg_shopping_cart_pack`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_shopping_cart_pack` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PACK_ID` bigint(11) NOT NULL COMMENT '套餐主键',
+  `PACK_NAME` varchar(2048) DEFAULT NULL COMMENT '套餐名称',
+  `CUSOTMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `ADD_TIME` timestamp NULL DEFAULT NULL COMMENT '加入时间',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_shopping_cart_pack_detail`
+--
+
+DROP TABLE IF EXISTS `qlg_shopping_cart_pack_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_shopping_cart_pack_detail` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `RELATE_ID` bigint(11) NOT NULL,
+  `CUSOTMER_ID` bigint(11) DEFAULT NULL,
+  `LOGIN_NAME` varchar(32) DEFAULT NULL,
+  `PACK_ID` bigint(11) NOT NULL COMMENT '套餐主键',
+  `GROUP_ID` bigint(11) NOT NULL COMMENT '分组主键',
+  `GROUP_NAME` varchar(256) DEFAULT NULL COMMENT '分组名称',
+  `BRAND_ID` bigint(11) DEFAULT NULL COMMENT '归属品牌主键',
+  `BRAND_NAME` varchar(256) DEFAULT NULL COMMENT '品牌中文名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_shopping_cart_pack_detail_deleted`
+--
+
+DROP TABLE IF EXISTS `qlg_shopping_cart_pack_detail_deleted`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_shopping_cart_pack_detail_deleted` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `RELATE_ID` bigint(11) NOT NULL,
+  `CUSOTMER_ID` bigint(11) DEFAULT NULL,
+  `LOGIN_NAME` varchar(32) DEFAULT NULL,
+  `PACK_ID` bigint(11) NOT NULL COMMENT '套餐主键',
+  `GROUP_ID` bigint(11) NOT NULL COMMENT '分组主键',
+  `GROUP_NAME` varchar(256) DEFAULT NULL COMMENT '分组名称',
+  `BRAND_ID` bigint(11) DEFAULT NULL COMMENT '归属品牌主键',
+  `BRAND_NAME` varchar(256) DEFAULT NULL COMMENT '品牌中文名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_shopping_cart_product`
+--
+
+DROP TABLE IF EXISTS `qlg_shopping_cart_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_shopping_cart_product` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` varchar(256) DEFAULT NULL,
+  `AGENT_NAME` varchar(256) DEFAULT NULL,
+  `STORE_ID` bigint(11) DEFAULT NULL,
+  `STORE_NAME` varchar(256) DEFAULT NULL,
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `CUSOTMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `ADD_TIME` timestamp NULL DEFAULT NULL COMMENT '加入时间',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_shopping_cart_product_deleted`
+--
+
+DROP TABLE IF EXISTS `qlg_shopping_cart_product_deleted`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_shopping_cart_product_deleted` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `AGENT_ID` bigint(11) DEFAULT NULL COMMENT '代理点主键',
+  `AGENT_NAME` varchar(256) DEFAULT NULL COMMENT '代理点名称',
+  `STORE_ID` bigint(11) DEFAULT NULL COMMENT '店铺主键',
+  `STORE_NAME` varchar(256) DEFAULT NULL COMMENT '店铺名称',
+  `PRODUCT_ID` bigint(11) NOT NULL COMMENT '商品主键',
+  `PRODUCT_NAME` varchar(2048) DEFAULT NULL COMMENT '商品名称',
+  `MODEL_ID` bigint(11) DEFAULT NULL COMMENT '归属商品型号主键',
+  `MODEL_NAME` varchar(256) DEFAULT NULL COMMENT '归属商品型号名称',
+  `CUSOTMER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `LOGIN_NAME` varchar(32) NOT NULL COMMENT '用户名',
+  `QUANTITY` int(11) DEFAULT '0' COMMENT '数量',
+  `ADD_TIME` timestamp NULL DEFAULT NULL COMMENT '加入时间',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_shopping_history`
+--
+
+DROP TABLE IF EXISTS `qlg_shopping_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_shopping_history` (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `PRODUCT_ID` bigint(20) DEFAULT NULL COMMENT '产品ID',
+  `CUSTOMER_ID` bigint(20) DEFAULT NULL COMMENT '用户ID',
+  `QUANTITY` int(11) DEFAULT NULL COMMENT '购买次数',
+  `DELETED` char(1) DEFAULT NULL COMMENT '是否删除',
+  `CREATE_USER` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_USER` bigint(20) DEFAULT NULL COMMENT '修改人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_sms_notice`
+--
+
+DROP TABLE IF EXISTS `qlg_sms_notice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_sms_notice` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `RECEIVER_ID` bigint(11) NOT NULL COMMENT '用户主键',
+  `RECEIVER_LOGIN_NAME` varchar(11) NOT NULL COMMENT '用户登录名',
+  `RECEIVER_TYPE` char(1) NOT NULL COMMENT '用户类型：U：管理后台用户；C：买家；S:卖家',
+  `RECEIVER_MOBILE` varchar(16) DEFAULT NULL COMMENT '手机号',
+  `STATE` char(2) NOT NULL COMMENT '状态 10：待发送； 20：已发送 ；30：发送失败。\n',
+  `CONTENT` varchar(255) DEFAULT NULL COMMENT '内容',
+  `BUSINESS_TYPE` varchar(5) DEFAULT NULL COMMENT '业务类型：发送优惠券：CN;注册验证吗：CRN；登陆验证码：CLN；修改密码验证码：CCN；新用户优惠券：NUCN；用户注册语音验证码：CVN；提现：DRN；确认发货：OSSN；卖家授权码：SLCN；卖家注册验证码：SCN；',
+  `TEMPLATE` varchar(16) DEFAULT NULL COMMENT '模板号',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_store`
+--
+
+DROP TABLE IF EXISTS `qlg_store`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_store` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `NAME` varchar(256) DEFAULT NULL COMMENT '店铺名称',
+  `TYPE` varchar(8) DEFAULT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qlg_trading_record`
+--
+
+DROP TABLE IF EXISTS `qlg_trading_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qlg_trading_record` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PAYER_ID` bigint(11) DEFAULT NULL COMMENT '付款人ID',
+  `PAYER_NAME` varchar(32) DEFAULT NULL COMMENT '付款人名称',
+  `PAYEE_ID` bigint(11) DEFAULT NULL COMMENT '收款人ID',
+  `PAYEE_NAME` varchar(32) DEFAULT NULL COMMENT '收款人名称',
+  `TRADE_TYPE` char(2) DEFAULT NULL COMMENT '交易类型 C 买家订单  S 卖家订单 DA 提现 DR 提现拒绝 R 充值',
+  `ORDER_ID` varchar(32) DEFAULT NULL COMMENT '订单主键',
+  `ORDER_NO` varchar(32) DEFAULT NULL COMMENT '订单号',
+  `B_SALE_AMOUNT` decimal(16,2) DEFAULT '0.00' COMMENT '变更前销售金额',
+  `D_SALE_AMOUNT` decimal(16,2) DEFAULT '0.00' COMMENT '变动销售金额',
+  `B_PURCHASE_AMOUNT` decimal(16,2) DEFAULT '0.00' COMMENT '变更前进货金额',
+  `D_PURCHASE_AMOUNT` decimal(16,2) DEFAULT '0.00' COMMENT '变动进货金额',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资金流水表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_blob_triggers`
+--
+
+DROP TABLE IF EXISTS `qrtz_blob_triggers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_blob_triggers` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `BLOB_DATA` blob,
+  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  KEY `SCHED_NAME` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_calendars`
+--
+
+DROP TABLE IF EXISTS `qrtz_calendars`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_calendars` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `CALENDAR_NAME` varchar(200) NOT NULL,
+  `CALENDAR` blob NOT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`CALENDAR_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_cron_triggers`
+--
+
+DROP TABLE IF EXISTS `qrtz_cron_triggers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_cron_triggers` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `CRON_EXPRESSION` varchar(120) NOT NULL,
+  `TIME_ZONE_ID` varchar(80) DEFAULT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_fired_triggers`
+--
+
+DROP TABLE IF EXISTS `qrtz_fired_triggers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_fired_triggers` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `ENTRY_ID` varchar(95) NOT NULL,
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `INSTANCE_NAME` varchar(200) NOT NULL,
+  `FIRED_TIME` bigint(13) NOT NULL,
+  `SCHED_TIME` bigint(13) NOT NULL,
+  `PRIORITY` int(11) NOT NULL,
+  `STATE` varchar(16) NOT NULL,
+  `JOB_NAME` varchar(200) DEFAULT NULL,
+  `JOB_GROUP` varchar(200) DEFAULT NULL,
+  `IS_NONCONCURRENT` varchar(1) DEFAULT NULL,
+  `REQUESTS_RECOVERY` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`ENTRY_ID`),
+  KEY `IDX_QRTZ_FT_TRIG_INST_NAME` (`SCHED_NAME`,`INSTANCE_NAME`),
+  KEY `IDX_QRTZ_FT_INST_JOB_REQ_RCVRY` (`SCHED_NAME`,`INSTANCE_NAME`,`REQUESTS_RECOVERY`),
+  KEY `IDX_QRTZ_FT_J_G` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
+  KEY `IDX_QRTZ_FT_JG` (`SCHED_NAME`,`JOB_GROUP`),
+  KEY `IDX_QRTZ_FT_T_G` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  KEY `IDX_QRTZ_FT_TG` (`SCHED_NAME`,`TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_job_details`
+--
+
+DROP TABLE IF EXISTS `qrtz_job_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_job_details` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `JOB_NAME` varchar(200) NOT NULL,
+  `JOB_GROUP` varchar(200) NOT NULL,
+  `DESCRIPTION` varchar(250) DEFAULT NULL,
+  `JOB_CLASS_NAME` varchar(250) NOT NULL,
+  `IS_DURABLE` varchar(1) NOT NULL,
+  `IS_NONCONCURRENT` varchar(1) NOT NULL,
+  `IS_UPDATE_DATA` varchar(1) NOT NULL,
+  `REQUESTS_RECOVERY` varchar(1) NOT NULL,
+  `JOB_DATA` blob,
+  PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
+  KEY `IDX_QRTZ_J_REQ_RECOVERY` (`SCHED_NAME`,`REQUESTS_RECOVERY`),
+  KEY `IDX_QRTZ_J_GRP` (`SCHED_NAME`,`JOB_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_locks`
+--
+
+DROP TABLE IF EXISTS `qrtz_locks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_locks` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `LOCK_NAME` varchar(40) NOT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`LOCK_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_paused_trigger_grps`
+--
+
+DROP TABLE IF EXISTS `qrtz_paused_trigger_grps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_paused_trigger_grps` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_scheduler_state`
+--
+
+DROP TABLE IF EXISTS `qrtz_scheduler_state`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_scheduler_state` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `INSTANCE_NAME` varchar(200) NOT NULL,
+  `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
+  `CHECKIN_INTERVAL` bigint(13) NOT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`INSTANCE_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_simple_triggers`
+--
+
+DROP TABLE IF EXISTS `qrtz_simple_triggers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_simple_triggers` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `REPEAT_COUNT` bigint(7) NOT NULL,
+  `REPEAT_INTERVAL` bigint(12) NOT NULL,
+  `TIMES_TRIGGERED` bigint(10) NOT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_simprop_triggers`
+--
+
+DROP TABLE IF EXISTS `qrtz_simprop_triggers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_simprop_triggers` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `STR_PROP_1` varchar(512) DEFAULT NULL,
+  `STR_PROP_2` varchar(512) DEFAULT NULL,
+  `STR_PROP_3` varchar(512) DEFAULT NULL,
+  `INT_PROP_1` int(11) DEFAULT NULL,
+  `INT_PROP_2` int(11) DEFAULT NULL,
+  `LONG_PROP_1` bigint(20) DEFAULT NULL,
+  `LONG_PROP_2` bigint(20) DEFAULT NULL,
+  `DEC_PROP_1` decimal(13,4) DEFAULT NULL,
+  `DEC_PROP_2` decimal(13,4) DEFAULT NULL,
+  `BOOL_PROP_1` varchar(1) DEFAULT NULL,
+  `BOOL_PROP_2` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `qrtz_triggers`
+--
+
+DROP TABLE IF EXISTS `qrtz_triggers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qrtz_triggers` (
+  `SCHED_NAME` varchar(120) NOT NULL,
+  `TRIGGER_NAME` varchar(200) NOT NULL,
+  `TRIGGER_GROUP` varchar(200) NOT NULL,
+  `JOB_NAME` varchar(200) NOT NULL,
+  `JOB_GROUP` varchar(200) NOT NULL,
+  `DESCRIPTION` varchar(250) DEFAULT NULL,
+  `NEXT_FIRE_TIME` bigint(13) DEFAULT NULL,
+  `PREV_FIRE_TIME` bigint(13) DEFAULT NULL,
+  `PRIORITY` int(11) DEFAULT NULL,
+  `TRIGGER_STATE` varchar(16) NOT NULL,
+  `TRIGGER_TYPE` varchar(8) NOT NULL,
+  `START_TIME` bigint(13) NOT NULL,
+  `END_TIME` bigint(13) DEFAULT NULL,
+  `CALENDAR_NAME` varchar(200) DEFAULT NULL,
+  `MISFIRE_INSTR` smallint(2) DEFAULT NULL,
+  `JOB_DATA` blob,
+  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  KEY `IDX_QRTZ_T_J` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
+  KEY `IDX_QRTZ_T_JG` (`SCHED_NAME`,`JOB_GROUP`),
+  KEY `IDX_QRTZ_T_C` (`SCHED_NAME`,`CALENDAR_NAME`),
+  KEY `IDX_QRTZ_T_G` (`SCHED_NAME`,`TRIGGER_GROUP`),
+  KEY `IDX_QRTZ_T_STATE` (`SCHED_NAME`,`TRIGGER_STATE`),
+  KEY `IDX_QRTZ_T_N_STATE` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`,`TRIGGER_STATE`),
+  KEY `IDX_QRTZ_T_N_G_STATE` (`SCHED_NAME`,`TRIGGER_GROUP`,`TRIGGER_STATE`),
+  KEY `IDX_QRTZ_T_NEXT_FIRE_TIME` (`SCHED_NAME`,`NEXT_FIRE_TIME`),
+  KEY `IDX_QRTZ_T_NFT_ST` (`SCHED_NAME`,`TRIGGER_STATE`,`NEXT_FIRE_TIME`),
+  KEY `IDX_QRTZ_T_NFT_MISFIRE` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`),
+  KEY `IDX_QRTZ_T_NFT_ST_MISFIRE` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_STATE`),
+  KEY `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_GROUP`,`TRIGGER_STATE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `quartz_scheduler_job`
+--
+
+DROP TABLE IF EXISTS `quartz_scheduler_job`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `quartz_scheduler_job` (
+  `ROW_ID` decimal(16,0) DEFAULT NULL COMMENT '主键',
+  `TASK_NAME` varchar(32) DEFAULT NULL COMMENT '任务名称',
+  `GROUP_NAME` varchar(32) DEFAULT NULL COMMENT '分组名称',
+  `TASK_TYPE` varchar(16) DEFAULT NULL COMMENT '任务类型',
+  `STATUS` char(1) DEFAULT NULL COMMENT '任务状态',
+  `CRON_EXPRESSION` varchar(100) DEFAULT NULL COMMENT '执行时间表达式',
+  `DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '任务描述',
+  `EXEC_TARGET` varchar(255) DEFAULT NULL COMMENT '执行类',
+  `PARAM_INFO` text COMMENT '其他参数信息',
+  `MODIFICATION_NUM` int(11) DEFAULT NULL COMMENT 'MODIFICATION_NUM',
+  `REMARK` varchar(255) DEFAULT NULL COMMENT 'REMARK'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `quartz_scheduler_log`
+--
+
+DROP TABLE IF EXISTS `quartz_scheduler_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `quartz_scheduler_log` (
+  `ROW_ID` decimal(16,0) DEFAULT NULL COMMENT '主键',
+  `PKID` decimal(16,0) DEFAULT NULL COMMENT '进程ID',
+  `TASK_ID` varchar(255) DEFAULT NULL COMMENT '任务ID',
+  `TASK_NAME` varchar(128) DEFAULT NULL COMMENT '任务名称',
+  `CALL_METHOD` varchar(128) DEFAULT NULL COMMENT '调用方法,:默认为调度中心',
+  `BEGIN_TIME` datetime DEFAULT NULL COMMENT '开始时间',
+  `END_TIME` datetime DEFAULT NULL COMMENT '结束时间',
+  `RESULT_FLAG` char(1) DEFAULT NULL COMMENT 'Y-成功 N-失败',
+  `LEVEL` char(1) DEFAULT NULL COMMENT ' 日志级别:U-紧急 N-普通',
+  `INFO` varchar(2048) DEFAULT NULL COMMENT '日志信息:任务运行过程中记录的信息',
+  `CALL_URL` varchar(255) DEFAULT NULL COMMENT '调用地址'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='调度任务日志';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_app_version`
+--
+
+DROP TABLE IF EXISTS `sys_app_version`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_app_version` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `PLATFORM` varchar(10) DEFAULT NULL COMMENT 'A:安卓；I：苹果；',
+  `APP_VERSION` varchar(10) DEFAULT NULL COMMENT '应用版本 1.0',
+  `APP_TYPE` char(1) DEFAULT NULL COMMENT 'C：买家版；S：买家版；',
+  `API_VERSION` varchar(10) DEFAULT NULL COMMENT '接口版本 1.0',
+  `UPGRADE` char(1) DEFAULT NULL COMMENT '是否强制升级',
+  `PUBLISH_TIME` timestamp NULL DEFAULT NULL COMMENT '发布时间',
+  `FILE_NAME` varchar(128) NOT NULL COMMENT '文件名称',
+  `FILE_TYPE` varchar(128) NOT NULL COMMENT '文件格式',
+  `ARCHIVE_NAME` varchar(128) NOT NULL COMMENT '归档名称',
+  `ARCHIVE_PATH` varchar(256) NOT NULL COMMENT '归档路径',
+  `DESCRIPTION` varchar(256) DEFAULT NULL COMMENT '更新描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_config`
+--
+
+DROP TABLE IF EXISTS `sys_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_config` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `K` varchar(32) NOT NULL COMMENT '键',
+  `V` varchar(1024) NOT NULL COMMENT '值',
+  `DESCRIPTION` varchar(2048) DEFAULT NULL COMMENT '描述',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_dictionary`
+--
+
+DROP TABLE IF EXISTS `sys_dictionary`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_dictionary` (
+  `ID` bigint(11) NOT NULL,
+  `NAME` varchar(128) NOT NULL,
+  `CODE` varchar(64) DEFAULT NULL,
+  `DESCRIPTION` varchar(256) DEFAULT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `NAME` (`NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_dictionary_item`
+--
+
+DROP TABLE IF EXISTS `sys_dictionary_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_dictionary_item` (
+  `ID` bigint(11) NOT NULL,
+  `NAME` varchar(128) NOT NULL,
+  `CODE` varchar(64) DEFAULT NULL,
+  `ORDERBY` int(11) DEFAULT '0',
+  `DICTIONARY_ID` bigint(11) DEFAULT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_menu`
+--
+
+DROP TABLE IF EXISTS `sys_menu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_menu` (
+  `ID` bigint(11) NOT NULL,
+  `NAME` varchar(128) NOT NULL COMMENT '菜单名称',
+  `PARENT_ID` bigint(11) DEFAULT NULL COMMENT '父菜单',
+  `ORDERBY` int(11) DEFAULT '0' COMMENT '排序',
+  `DESCRIPTION` varchar(256) DEFAULT NULL COMMENT '描述',
+  `URL` varchar(256) DEFAULT NULL COMMENT '菜单连接',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_role`
+--
+
+DROP TABLE IF EXISTS `sys_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_role` (
+  `ID` bigint(11) NOT NULL,
+  `NAME` varchar(128) NOT NULL,
+  `DESCRIPTION` varchar(256) DEFAULT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `NAME` (`NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_role_menu`
+--
+
+DROP TABLE IF EXISTS `sys_role_menu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_role_menu` (
+  `ROLE_ID` bigint(11) NOT NULL,
+  `MENU_ID` bigint(11) NOT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_role_user`
+--
+
+DROP TABLE IF EXISTS `sys_role_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_role_user` (
+  `USER_ID` bigint(11) NOT NULL,
+  `ROLE_ID` bigint(11) NOT NULL,
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_seller_session`
+--
+
+DROP TABLE IF EXISTS `sys_seller_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_seller_session` (
+  `ID` char(128) NOT NULL COMMENT '主键',
+  `SESSION` text NOT NULL COMMENT '会话',
+  `SELLER_ID` bigint(11) DEFAULT NULL,
+  `VALID_TIME` timestamp NULL DEFAULT NULL COMMENT '生效时间',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_sequence`
+--
+
+DROP TABLE IF EXISTS `sys_sequence`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_sequence` (
+  `NAME` varchar(32) NOT NULL,
+  `NEXTVAL` bigint(11) DEFAULT NULL,
+  `STEP` int(2) DEFAULT '1',
+  PRIMARY KEY (`NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_session`
+--
+
+DROP TABLE IF EXISTS `sys_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_session` (
+  `ID` char(128) NOT NULL COMMENT '主键',
+  `SESSION` text NOT NULL COMMENT '会话',
+  `TYPE` char(8) DEFAULT NULL,
+  `CUSTOMER_ID` bigint(11) DEFAULT NULL,
+  `VALID_TIME` timestamp NULL DEFAULT NULL COMMENT '生效时间',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sys_user`
+--
+
+DROP TABLE IF EXISTS `sys_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_user` (
+  `ID` bigint(11) NOT NULL COMMENT '主键',
+  `USERNAME` varchar(32) NOT NULL COMMENT '用户名',
+  `PASSWORD` varchar(64) NOT NULL COMMENT '密码',
+  `SALT` varchar(128) DEFAULT NULL COMMENT '盐',
+  `ENABLED` char(1) NOT NULL DEFAULT 'Y' COMMENT '是否启用',
+  `FULLNAME` varchar(128) DEFAULT NULL COMMENT '真实姓名',
+  `SEX` char(1) DEFAULT NULL COMMENT '性别',
+  `AGE` char(3) DEFAULT NULL COMMENT '年龄',
+  `ID_NO` varchar(45) DEFAULT NULL COMMENT '身份证号码',
+  `MOBILE` varchar(11) DEFAULT NULL COMMENT '手机号',
+  `EMAIL` varchar(128) DEFAULT NULL COMMENT '邮箱',
+  `ADDRESS` varchar(2048) DEFAULT NULL COMMENT '住址',
+  `AGENT_ID` bigint(11) DEFAULT NULL COMMENT '所属代理点',
+  `DELETED` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除',
+  `CREATE_TIME` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `CREATE_USER` bigint(11) DEFAULT NULL COMMENT '创建人',
+  `UPDATE_TIME` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `UPDATE_USER` bigint(11) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `USERNAME` (`USERNAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping events for database 'qulingou1'
+--
+
+--
+-- Dumping routines for database 'qulingou1'
+--
+/*!50003 DROP FUNCTION IF EXISTS `get_category_childs` */;
+ALTER DATABASE `qulingou1` CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `get_category_childs`(rootId BIGINT(11)) RETURNS varchar(10000) CHARSET latin1
+BEGIN
+ DECLARE sTemp VARCHAR(10000);
+  DECLARE sTempChd VARCHAR(10000);
+
+  SET sTemp = rootId;
+  SET sTempChd = rootId;
+   
+  WHILE sTempChd is not null DO
+    SELECT group_concat(ID) INTO sTempChd FROM qlg_category where FIND_IN_SET(PARENT_ID,sTempChd) > 0;
+    IF sTempChd is not null THEN 
+     SET sTemp = concat(sTemp,',',sTempChd);
+    END IF;
+  END WHILE;
+  RETURN sTemp;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `qulingou1` CHARACTER SET utf8 COLLATE utf8_general_ci ;
+/*!50003 DROP FUNCTION IF EXISTS `SEQ` */;
+ALTER DATABASE `qulingou1` CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `SEQ`(v_seq_name VARCHAR(32)) RETURNS decimal(16,0)
+BEGIN
+	DECLARE CURRVAL INT(11); 
+	SET CURRVAL = 0;
+	UPDATE SYS_SEQUENCE 
+SET 
+    NEXTVAL = NEXTVAL + STEP
+WHERE
+    NAME = V_SEQ_NAME;
+	SELECT 
+    NEXTVAL
+INTO CURRVAL FROM
+    SYS_SEQUENCE
+WHERE
+    NAME = V_SEQ_NAME
+LIMIT 1;
+	RETURN  CAST(CONCAT('1', RIGHT(CONCAT('00000000', CURRVAL), 10)) AS SIGNED);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `qulingou1` CHARACTER SET utf8 COLLATE utf8_general_ci ;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2016-10-14 17:01:38
