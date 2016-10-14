@@ -12,12 +12,15 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import com.github.core.user.model.UserBean;
+import com.github.core.user.service.UserService;
 import com.github.frame.util.FrameUtil;
 import com.github.manager.common.Constant;
 
 public class ManagerAuthRealm extends AuthorizingRealm {
 
     private static final Logger log = Logger.getLogger(ManagerAuthRealm.class);
+
+    private UserService userService;
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
@@ -47,6 +50,14 @@ public class ManagerAuthRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         return new SimpleAuthorizationInfo();
+    }
+
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
 }

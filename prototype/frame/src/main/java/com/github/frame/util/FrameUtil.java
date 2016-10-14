@@ -3,6 +3,7 @@ package com.github.frame.util;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,4 +28,11 @@ public class FrameUtil {
         return SecurityUtils.getSubject().getSession();
     }
 
+    public static String md5Hash(String source, String salt) {
+        return new Md5Hash(source, salt, 3).toString();
+    }
+
+    public static String md5Hash(String source) {
+        return new Md5Hash(source).toString();
+    }
 }
