@@ -2,6 +2,8 @@ package com.github.frame.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.github.frame.common.Symbol;
@@ -20,4 +22,9 @@ public class FrameUtil {
         }
         return path.toString();
     }
+
+    public static Session getSession() {
+        return SecurityUtils.getSubject().getSession();
+    }
+
 }
