@@ -47,7 +47,7 @@
         <property name="sessionManager" ref="sessionManager" />
     </bean>
 
-    <bean id="monitorRealm" class="com.yihui.frame.plugin.shiro.WebAuthRealm">
+    <bean id="monitorRealm" class="com.github.manager.plugin.shiro.ManagerAuthRealm">
         <property name="userService" ref="userService" />
     </bean>
 

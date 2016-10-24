@@ -12,7 +12,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
         int itemCount = getBaseDAO().selectCount(t);
 
-        List<T> itemList = itemCount == 0 ? new ArrayList<T>() : getBaseDAO().selectPage(t, new RowBounds(p.getPageSize(), (p.getPageNo() - 1) * p.getPageSize()));
+        List<T> itemList = itemCount == 0 ? new ArrayList<T>() : getBaseDAO().selectList(t, new RowBounds(p.getPageSize(), (p.getPageNo() - 1) * p.getPageSize()));
 
         p.setItemCount(itemCount);
         p.setItemList(itemList);

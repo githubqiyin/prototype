@@ -1,5 +1,7 @@
 package com.github.frame.util;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -22,6 +24,13 @@ public class FrameUtil {
             path.append(Symbol.SLASH);
         }
         return path.toString();
+    }
+
+    public static String getBasePath(HttpServletRequest request) {
+        StringBuffer basePath = new StringBuffer();
+        basePath.append(request.getScheme()).append(Symbol.COMMA).append(Symbol.SLASH).append(Symbol.SLASH).append(request.getServerName()).append(Symbol.COLON).append(request.getServerPort())
+                .append(request.getContextPath()).append(Symbol.SLASH);
+        return basePath.toString();
     }
 
     public static Session getSession() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.github.core.user.dao.UserDAO">
-    <!--1.查询列 -->
+
     <sql id="SELECT_COLUMN">
         SU.ID id,
         SU.USERNAME username,
@@ -19,11 +19,9 @@
         DATE_FORMAT(SU.CREATE_TIME,'%Y-%m-%d %H:%i:%s') createTime,
         SU.CREATE_USER createUser,
         DATE_FORMAT(SU.UPDATE_TIME,'%Y-%m-%d %H:%i:%s') updateTime,
-        SU.UPDATE_USER updateUser,
-        QA.NAME agentName
+        SU.UPDATE_USER updateUser
     </sql>
 
-    <!--2.查询条件 -->
     <sql id="WHERE_CONDITION">
         <if test="id != null and id != ''">
             AND SU.ID = #{id}
@@ -78,28 +76,24 @@
         </if>
     </sql>
 
-    <!--3.按VO查询记录数 -->
-    <select id="selectForCount" parameterType="UserVO" resultType="java.lang.Integer">
+    <select id="selectCount" parameterType="userBean" resultType="java.lang.Integer">
         SELECT COUNT(0) value FROM SYS_USER SU WHERE DELETED = 'N'
         <include refid="WHERE_CONDITION" />
     </select>
 
-    <!--3.按VO查询记录 -->
-    <select id="selectForList" parameterType="UserVO" resultType="UserVO">
+    <select id="selectList" parameterType="userBean" resultType="userBean">
         SELECT
         <include refid="SELECT_COLUMN" />
         FROM SYS_USER SU 
-        LEFT JOIN  QLG_AGENT QA ON SU.AGENT_ID = QA.ID
         WHERE SU.DELETED = 'N'
         <include refid="WHERE_CONDITION" />
     </select>
 
     <!--4.按VO查询记录 -->
-    <select id="selectByVO" parameterType="UserVO" resultType="UserVO">
+    <select id="select" parameterType="userBean" resultType="userBean">
         SELECT
         <include refid="SELECT_COLUMN" />
         FROM SYS_USER SU
-        LEFT JOIN  QLG_AGENT QA ON SU.AGENT_ID = QA.ID
         WHERE SU.DELETED = 'N'
         <if test="id != null and id != ''">
             AND SU.ID = #{id}
@@ -109,8 +103,7 @@
         </if>
     </select>
 
-    <!--5.按VO插入记录 -->
-    <insert id="insertByVO" parameterType="UserVO">
+    <insert id="insert" parameterType="userBean">
         <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">
             SELECT SEQ('DEFAULT') id FROM DUAL
         </selectKey>
@@ -118,22 +111,7 @@
         VALUES(#{id},#{username},#{password},#{salt},#{enabled},#{fullname},#{sex},#{age},#{idNo},#{email},#{address},#{agentId},NOW(),#{createUser})
     </insert>
 
-    <!--6.按List批量插入记录 -->
-    <insert id="batchInsertByList" parameterType="java.util.List">
-        INSERT INTO SYS_USER(ID,USERNAME,PASSWORD,SALT,ENABLED,FULLNAME,SEX,AGE,ID_NO,EMAIL,ADDRESS,AGENT_ID,CREATE_TIME,CREATE_USER)
-        VALUES
-        <foreach collection="list" item="item" index="index" separator=",">
-            (SEQ('DEFAULT'),#{item.username},#{item.password},#{item.salt},#{item.enabled},#{item.fullname},#{item.sex},#{item.age},#{item.idNo},#{item.email},#{item.address},#{item.agentId},NOW(),#{item.createUser})
-        </foreach>
-    </insert>
-
-    <!--7.按VO逻辑删除记录 -->
-    <update id="deleteByVO" parameterType="UserVO">
-        UPDATE SYS_USER SU SET SU.DELETED = 'Y' WHERE ID = #{id}
-    </update>
-
-    <!--8.按VO更新记录 -->
-    <update id="updateByVO" parameterType="UserVO">
+    <update id="update" parameterType="userBean">
         UPDATE SYS_USER
         <set>
             <if test="username != null">USERNAME=#{username},</if>
@@ -154,8 +132,19 @@
         WHERE ID = #{id}
     </update>
 
-    <!--9.按List批量更新记录 -->
-    <update id="batchUpdateByList" parameterType="java.util.List">
+    <update id="delete" parameterType="userBean">
+        UPDATE SYS_USER SU SET SU.DELETED = 'Y' WHERE SU.ID = #{id}
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO SYS_USER(ID,USERNAME,PASSWORD,SALT,ENABLED,FULLNAME,SEX,AGE,ID_NO,EMAIL,ADDRESS,AGENT_ID,CREATE_TIME,CREATE_USER)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (SEQ('DEFAULT'),#{item.username},#{item.password},#{item.salt},#{item.enabled},#{item.fullname},#{item.sex},#{item.age},#{item.idNo},#{item.email},#{item.address},#{item.agentId},NOW(),#{item.createUser})
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             UPDATE SYS_USER
             <set>
@@ -177,4 +166,5 @@
             WHERE ID = #{item.id}
         </foreach>
     </update>
+
 </mapper>

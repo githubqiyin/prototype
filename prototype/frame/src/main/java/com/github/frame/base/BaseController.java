@@ -12,7 +12,6 @@ import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -24,7 +23,6 @@ import com.github.frame.exception.ServiceException;
 import com.github.frame.plugin.validator.BaseGroup;
 import com.github.frame.util.FrameUtil;
 
-@Component
 public abstract class BaseController<T> {
 
     @Autowired(required = false)

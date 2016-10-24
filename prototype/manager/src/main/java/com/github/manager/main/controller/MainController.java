@@ -1,16 +1,15 @@
-package com.github.manager.user.controller;
+package com.github.manager.main.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.github.core.user.model.UserBean;
-import com.github.core.user.service.UserService;
+import com.github.frame.base.BaseBean;
 import com.github.frame.base.BaseController;
 import com.github.frame.base.BaseService;
 import com.github.frame.common.Code;
@@ -19,13 +18,9 @@ import com.github.frame.util.FrameUtil;
 import com.github.manager.plugin.shiro.ManagerToken;
 
 @Controller
-@RequestMapping("user")
-public class UserController extends BaseController<UserBean> {
+public class MainController extends BaseController<BaseBean> {
 
-    @Autowired
-    private UserService userService;
-
-    @RequestMapping(value = "gotoLogin", method = RequestMethod.GET)
+    @RequestMapping(value = "login", method = RequestMethod.GET)
     public String gotoLogin() {
         return "main/login";
     }
@@ -42,8 +37,8 @@ public class UserController extends BaseController<UserBean> {
     }
 
     @Override
-    public BaseService<UserBean> getBaseService() {
-        return this.userService;
+    public BaseService<BaseBean> getBaseService() {
+        return null;
     }
 
 }

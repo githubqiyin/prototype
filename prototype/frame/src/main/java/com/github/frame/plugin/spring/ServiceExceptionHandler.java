@@ -16,9 +16,9 @@ public class ServiceExceptionHandler implements HandlerExceptionResolver {
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) {
-        ModelAndView mv = new ModelAndView("/main/exception");
-        mv.addObject(e instanceof ServiceException ? (ServiceException) e : new ServiceException(Code.SYSTEM_ERROR, e.getMessage()));
-        logger.info("请求异常", e);
+        ModelAndView mv = new ModelAndView("exception");
+        mv.addObject(e instanceof ServiceException ? (ServiceException) e : new ServiceException(Code.SYSTEM_ERROR, "系统异常"));
+        logger.info(e);
         return mv;
     }
 }

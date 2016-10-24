@@ -9,7 +9,7 @@ public interface BaseDAO<T> extends Serializable {
 
     public int selectCount(T t);
 
-    public List<T> selectPage(T t, RowBounds rowBounds);
+    public List<T> selectList(T t, RowBounds rowBounds);
 
     public List<T> selectList(T t);
 
