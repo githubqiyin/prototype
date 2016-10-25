@@ -9,16 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.github.core.user.model.UserBean;
-import com.github.frame.base.BaseBean;
-import com.github.frame.base.BaseController;
-import com.github.frame.base.BaseService;
 import com.github.frame.common.Code;
 import com.github.frame.exception.ServiceException;
 import com.github.frame.util.FrameUtil;
 import com.github.manager.plugin.shiro.ManagerToken;
 
 @Controller
-public class MainController extends BaseController<BaseBean> {
+public class MainController {
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String gotoLogin() {
@@ -34,11 +31,6 @@ public class MainController extends BaseController<BaseBean> {
             m.addAttribute(new ServiceException(Code.AUTH_FALL));
             return "main/login";
         }
-    }
-
-    @Override
-    public BaseService<BaseBean> getBaseService() {
-        return null;
     }
 
 }

@@ -108,5 +108,6 @@
         </property>
     </bean>
 
-    <!-- memcache缓存 <import resource="spring-memcached.xml" /> -->
+    <!-- memcache缓存 -->
+    <import resource="spring-memcached.xml" />
 </beans>

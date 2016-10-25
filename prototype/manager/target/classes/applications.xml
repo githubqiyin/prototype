@@ -15,7 +15,7 @@
 
     <!-- 组件加载 -->
     <context:annotation-config />
-    <context:component-scan base-package="com.github">
+    <context:component-scan base-package="com.github.core">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
@@ -55,7 +55,7 @@
         <property name="configLocation" value="classpath:spring-mybatis.xml" />
     </bean>
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.yihui.*.**.dao"></property>
+        <property name="basePackage" value="com.github.*.**.dao"></property>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
 
@@ -108,5 +108,6 @@
         </property>
     </bean>
 
-    <!-- memcache缓存 <import resource="spring-memcached.xml" /> -->
+    <!-- memcache缓存 -->
+    <import resource="spring-memcached.xml" />
 </beans>

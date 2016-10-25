@@ -8,8 +8,6 @@ public class UserBean extends BaseBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;
-
     /**
      * 用户名
      */
@@ -89,16 +87,6 @@ public class UserBean extends BaseBean implements Serializable {
      * 更新人
      */
     private String updateUser;
-
-    /**
-     * 角色Id拼接字符串
-     */
-    private String roleIds;
-
-    /**
-     * 代理点名称
-     */
-    private String agentName;
 
     public UserBean() {
     }
@@ -241,22 +229,6 @@ public class UserBean extends BaseBean implements Serializable {
 
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser;
-    }
-
-    public String getRoleIds() {
-        return roleIds;
-    }
-
-    public void setRoleIds(String roleIds) {
-        this.roleIds = roleIds;
-    }
-
-    public String getAgentName() {
-        return agentName;
-    }
-
-    public void setAgentName(String agentName) {
-        this.agentName = agentName;
     }
 
 }

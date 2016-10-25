@@ -19,6 +19,7 @@
         <property name="filterChainDefinitions">
             <value>
                 /login.html = anon
+                /*/gotoEdit.html = anon
                 /logout.html = logout
                 /index.html = authc
                 /css/** = anon

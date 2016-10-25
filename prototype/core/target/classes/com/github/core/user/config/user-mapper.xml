@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.core.user.dao.UserDAO">
+
+    <sql id="SELECT_COLUMN">
+        SU.ID id,
+        SU.USERNAME username,
+        SU.PASSWORD password,
+        SU.SALT salt,
+        SU.ENABLED enabled,
+        SU.FULLNAME fullname,
+        SU.SEX sex,
+        SU.AGE age,
+        SU.ID_NO idNo,
+        SU.AGENT_ID agentId,
+        SU.EMAIL email,
+        SU.ADDRESS address,
+        SU.DELETED deleted,
+        DATE_FORMAT(SU.CREATE_TIME,'%Y-%m-%d %H:%i:%s') createTime,
+        SU.CREATE_USER createUser,
+        DATE_FORMAT(SU.UPDATE_TIME,'%Y-%m-%d %H:%i:%s') updateTime,
+        SU.UPDATE_USER updateUser
+    </sql>
+
+    <sql id="WHERE_CONDITION">
+        <if test="id != null and id != ''">
+            AND SU.ID = #{id}
+        </if>
+        <if test="username != null and username != ''">
+            AND SU.USERNAME = #{username}
+        </if>
+        <if test="password != null and password != ''">
+            AND SU.PASSWORD = #{password}
+        </if>
+        <if test="salt != null and salt != ''">
+            AND SU.SALT = #{salt}
+        </if>
+        <if test="enabled != null and enabled != ''">
+            AND SU.ENABLED = #{enabled}
+        </if>
+        <if test="fullname != null and fullname != ''">
+            AND SU.FULLNAME = #{fullname}
+        </if>
+        <if test="sex != null and sex != ''">
+            AND SU.SEX = #{sex}
+        </if>
+        <if test="age != null and age != ''">
+            AND SU.AGE = #{age}
+        </if>
+        <if test="idNo != null and idNo != ''">
+            AND SU.ID_NO = #{idNo}
+        </if>
+        <if test="email != null and email != ''">
+            AND SU.EMAIL = #{email}
+        </if>
+        <if test="address != null and address != ''">
+            AND SU.ADDRESS = #{address}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            AND SU.AGENT_ID = #{agentId}
+        </if>
+        <if test="deleted != null and deleted != ''">
+            AND SU.DELETED = #{deleted}
+        </if>
+        <if test="createTime != null and createTime != ''">
+            AND DATE_FORMAT(SU.CREATE_TIME,'%Y-%m-%d %H:%i:%s') = #{createTime}
+        </if>
+        <if test="createUser != null and createUser != ''">
+            AND SU.CREATE_USER = #{createUser}
+        </if>
+        <if test="updateTime != null and updateTime != ''">
+            AND DATE_FORMAT(SU.UPDATE_TIME,'%Y-%m-%d %H:%i:%s') = #{updateTime}
+        </if>
+        <if test="updateUser != null and updateUser != ''">
+            AND SU.UPDATE_USER = #{updateUser}
+        </if>
+    </sql>
+
+    <select id="selectCount" parameterType="userBean" resultType="java.lang.Integer">
+        SELECT COUNT(0) value FROM SYS_USER SU WHERE DELETED = 'N'
+        <include refid="WHERE_CONDITION" />
+    </select>
+
+    <select id="selectList" parameterType="userBean" resultType="userBean">
+        SELECT
+        <include refid="SELECT_COLUMN" />
+        FROM SYS_USER SU 
+        WHERE SU.DELETED = 'N'
+        <include refid="WHERE_CONDITION" />
+    </select>
+
+    <!--4.按VO查询记录 -->
+    <select id="select" parameterType="userBean" resultType="userBean">
+        SELECT
+        <include refid="SELECT_COLUMN" />
+        FROM SYS_USER SU
+        WHERE SU.DELETED = 'N'
+        <if test="id != null and id != ''">
+            AND SU.ID = #{id}
+        </if>
+        <if test="username != null and username != ''">
+            AND SU.USERNAME = #{username}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="userBean">
+        <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">
+            SELECT SEQ('DEFAULT') id FROM DUAL
+        </selectKey>
+        INSERT INTO SYS_USER(ID,USERNAME,PASSWORD,SALT,ENABLED,FULLNAME,SEX,AGE,ID_NO,EMAIL,ADDRESS,AGENT_ID,CREATE_TIME,CREATE_USER)
+        VALUES(#{id},#{username},#{password},#{salt},#{enabled},#{fullname},#{sex},#{age},#{idNo},#{email},#{address},#{agentId},NOW(),#{createUser})
+    </insert>
+
+    <update id="update" parameterType="userBean">
+        UPDATE SYS_USER
+        <set>
+            <if test="username != null">USERNAME=#{username},</if>
+            <if test="password != null">PASSWORD=#{password},</if>
+            <if test="salt != null">SALT=#{salt},</if>
+            <if test="enabled != null">ENABLED=#{enabled},</if>
+            <if test="fullname != null">FULLNAME=#{fullname},</if>
+            <if test="sex != null">SEX=#{sex},</if>
+            <if test="age != null">AGE=#{age},</if>
+            <if test="idNo != null">ID_NO=#{idNo},</if>
+            <if test="agentId != null">AGENT_ID=#{agentId},</if>
+            <if test="email != null">EMAIL=#{email},</if>
+            <if test="address != null">ADDRESS=#{address},</if>
+            <if test="deleted != null">DELETED=#{deleted},</if>
+            <if test="updateUser != null">UPDATE_USER=#{updateUser},</if>
+            UPDATE_TIME=NOW()
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete" parameterType="userBean">
+        UPDATE SYS_USER SU SET SU.DELETED = 'Y' WHERE SU.ID = #{id}
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO SYS_USER(ID,USERNAME,PASSWORD,SALT,ENABLED,FULLNAME,SEX,AGE,ID_NO,EMAIL,ADDRESS,AGENT_ID,CREATE_TIME,CREATE_USER)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (SEQ('DEFAULT'),#{item.username},#{item.password},#{item.salt},#{item.enabled},#{item.fullname},#{item.sex},#{item.age},#{item.idNo},#{item.email},#{item.address},#{item.agentId},NOW(),#{item.createUser})
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE SYS_USER
+            <set>
+                <if test="item.username != null">USERNAME=#{item.username},</if>
+                <if test="item.password != null">PASSWORD=#{item.password},</if>
+                <if test="item.salt != null">SALT=#{item.salt},</if>
+                <if test="item.enabled != null">ENABLED=#{item.enabled},</if>
+                <if test="item.fullname != null">FULLNAME=#{item.fullname},</if>
+                <if test="item.sex != null">SEX=#{item.sex},</if>
+                <if test="item.age != null">AGE=#{item.age},</if>
+                <if test="item.idNo != null">ID_NO=#{item.idNo},</if>
+                <if test="item.email != null">EMAIL=#{item.email},</if>
+                <if test="item.address != null">ADDRESS=#{item.address},</if>
+                <if test="item.agentId != null">AGENT_ID=#{item.agentId},</if>
+                <if test="item.deleted != null">DELETED=#{item.deleted},</if>
+                <if test="item.updateUser != null">UPDATE_USER=#{item.updateUser},</if>
+                UPDATE_TIME=NOW()
+            </set>
+            WHERE ID = #{item.id}
+        </foreach>
+    </update>
+
+</mapper>

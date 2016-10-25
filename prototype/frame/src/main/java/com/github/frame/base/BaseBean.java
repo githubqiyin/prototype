@@ -4,26 +4,23 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.github.frame.common.Symbol;
+import com.google.code.ssm.api.CacheKeyMethod;
+
 public abstract class BaseBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Map<String, Object> extra = new HashMap<String, Object>();
+    protected String id;
 
-    public void put(String key, Object value) {
-        extra.put(key, value);
+    protected Map<String, Object> extra = new HashMap<String, Object>();
+
+    public String getId() {
+        return id;
     }
 
-    public Object get(String key) {
-        return extra.get(key);
-    }
-
-    public void remove(String key) {
-        extra.remove(key);
-    }
-
-    public void clear() {
-        extra.clear();
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Map<String, Object> getExtra() {
@@ -34,4 +31,8 @@ public abstract class BaseBean implements Serializable {
         this.extra = extra;
     }
 
+    @CacheKeyMethod
+    public String cacheKey() {
+        return new StringBuilder(this.getClass().getCanonicalName()).append(Symbol.POINT).append(this.getId()).toString();
+    }
 }
