@@ -8,25 +8,15 @@ import com.github.core.user.dao.UserDAO;
 import com.github.core.user.model.UserBean;
 import com.github.core.user.service.UserService;
 import com.github.frame.base.BaseDAO;
-import com.github.frame.base.BaseServiceImpl;
-import com.github.frame.util.FrameUtil;
-import com.google.code.ssm.api.ParameterValueKeyProvider;
-import com.google.code.ssm.api.ReadThroughSingleCache;
+import com.github.frame.base.CacheServiceImpl;
 
 @Service("userService")
-public class UserServiceImpl extends BaseServiceImpl<UserBean> implements UserService {
+public class UserServiceImpl extends CacheServiceImpl<UserBean> implements UserService {
 
-    private static final Logger logger = Logger.getLogger(FrameUtil.class);
+    private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserDAO userDAO;
-
-    @Override
-    @ReadThroughSingleCache(namespace = "singleCache", expiration = 30)
-    public UserBean doFindFromCache(@ParameterValueKeyProvider UserBean userBean) {
-        logger.info("未命中缓存");
-        return doFind(userBean);
-    }
 
     @Override
     public BaseDAO<UserBean> getBaseDAO() {

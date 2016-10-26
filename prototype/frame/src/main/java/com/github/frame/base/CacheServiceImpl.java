@@ -6,7 +6,15 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.ibatis.session.RowBounds;
 
-public abstract class BaseServiceImpl<T> implements BaseService<T> {
+import com.github.frame.base.BaseDAO;
+import com.github.frame.base.BaseService;
+import com.github.frame.base.Pagination;
+import com.github.frame.util.FrameConstant;
+import com.google.code.ssm.api.InvalidateSingleCache;
+import com.google.code.ssm.api.ParameterValueKeyProvider;
+import com.google.code.ssm.api.ReadThroughSingleCache;
+
+public abstract class CacheServiceImpl<T> extends BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     public void doPage(T t, Pagination<T> p) {
@@ -21,7 +29,8 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     @Override
-    public T doFind(T t) {
+    @ReadThroughSingleCache(namespace = FrameConstant.CACHE_NAMESPACE, expiration = FrameConstant.CACHE_CYCLE.LONG)
+    public T doFind(@ParameterValueKeyProvider T t) {
         return getBaseDAO().select(t);
     }
 
@@ -49,7 +58,8 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     @Override
-    public int doUpdate(T t) {
+    @InvalidateSingleCache(namespace = FrameConstant.CACHE_NAMESPACE)
+    public int doUpdate(@ParameterValueKeyProvider T t) {
         return getBaseDAO().update(t);
     }
 
@@ -61,7 +71,9 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
         return getBaseDAO().batchUpdate(ts);
     }
 
-    public int doDelete(T t) {
+    @Override
+    @InvalidateSingleCache(namespace = FrameConstant.CACHE_NAMESPACE)
+    public int doDelete(@ParameterValueKeyProvider T t) {
         return getBaseDAO().delete(t);
     }
 

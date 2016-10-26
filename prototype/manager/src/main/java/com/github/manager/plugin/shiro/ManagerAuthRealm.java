@@ -11,10 +11,10 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import com.github.core.common.Constant;
 import com.github.core.user.model.UserBean;
 import com.github.core.user.service.UserService;
 import com.github.frame.util.FrameUtil;
-import com.github.manager.common.Constant;
 
 public class ManagerAuthRealm extends AuthorizingRealm {
 

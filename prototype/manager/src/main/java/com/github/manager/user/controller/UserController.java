@@ -20,7 +20,7 @@ public class UserController extends BaseController<UserBean> {
     @Override
     @RequestMapping("/gotoEdit")
     public String gotoEdit(UserBean userBean, ModelMap m) {
-        m.addAttribute(userService.doFindFromCache(userBean));
+        m.addAttribute(userService.doFind(userBean));
         return basePath + "edit";
     }
 

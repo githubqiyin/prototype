@@ -10,6 +10,6 @@
 <title></title>
 </head>
 <body>
-user edit
+user edit ${userBean.fullname}
 </body>
 </html>
