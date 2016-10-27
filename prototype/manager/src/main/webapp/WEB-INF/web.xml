@@ -58,7 +58,7 @@
 
     <filter-mapping>
         <filter-name>shiroFilter</filter-name>
-        <url-pattern>*.html</url-pattern>
+        <url-pattern>*.test</url-pattern>
     </filter-mapping>
 
     <servlet>
