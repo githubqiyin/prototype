@@ -11,7 +11,7 @@
     </settings>
 
     <typeAliases>
-        <typeAlias alias="userBean" type="com.github.core.user.model.UserBean" />
+        <typeAlias alias="userBean" type="com.github.user.model.UserBean" />
     </typeAliases>
 
     <plugins>
@@ -19,7 +19,7 @@
     </plugins>
 
     <mappers>
-        <mapper resource="com/github/core/user/config/user-mapper.xml" />
+        <mapper resource="com/github/user/config/user-mapper.xml" />
     </mappers>
 
 </configuration>

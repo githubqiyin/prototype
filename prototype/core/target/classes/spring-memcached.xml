@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-4.1.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+                        http://www.springframework.org/schema/cache
+                        http://www.springframework.org/schema/cache/spring-cache-4.1.xsd">
+
+    <import resource="simplesm-context.xml" />
+
+    <context:component-scan base-package="com.github" />
+
+    <aop:aspectj-autoproxy />
+
+    <context:annotation-config />
+
+    <cache:annotation-driven cache-manager="cacheManager" />
+
+    <bean id="cacheManager" class="org.springframework.cache.concurrent.ConcurrentMapCacheManager" />
+
+    <bean name="defaultMemcachedClient" class="com.google.code.ssm.CacheFactory">
+        <property name="cacheClientFactory">
+            <bean name="cacheClientFactory" class="com.google.code.ssm.providers.xmemcached.MemcacheClientFactoryImpl" />
+        </property>
+        <!-- 缓存地址 -->
+        <property name="addressProvider">
+            <bean class="com.google.code.ssm.config.DefaultAddressProvider">
+                <property name="address" value="192.168.1.125:11211" />
+            </bean>
+        </property>
+        <!-- 缓存配置 -->
+        <property name="configuration">
+            <bean class="com.google.code.ssm.providers.xmemcached.XMemcachedConfiguration">
+                <property name="consistentHashing" value="true" />
+                <property name="connectionPoolSize" value="10" />
+                <property name="optimizeGet" value="true" />
+            </bean>
+        </property>
+    </bean>
+
+    <bean class="com.google.code.ssm.Settings">
+        <property name="order" value="500" />
+    </bean>
+</beans>
