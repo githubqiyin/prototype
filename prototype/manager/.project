@@ -3,7 +3,6 @@
 	<name>manager</name>
 	<comment></comment>
 	<projects>
-		<project>core</project>
 		<project>frame</project>
 	</projects>
 	<buildSpec>

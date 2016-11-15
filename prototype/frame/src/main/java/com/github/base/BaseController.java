@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.ui.ModelMap;
@@ -24,6 +25,8 @@ import com.github.plugin.validator.BaseGroup;
 import com.github.util.FrameUtil;
 
 public abstract class BaseController<T> {
+
+    public static final Logger logger = Logger.getLogger(CacheServiceImpl.class);
 
     @Autowired(required = false)
     protected HttpServletRequest request;

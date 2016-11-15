@@ -2,6 +2,8 @@ package com.github.base;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.github.util.FrameConstant;
 import com.google.code.ssm.api.InvalidateMultiCache;
 import com.google.code.ssm.api.InvalidateSingleCache;
@@ -9,6 +11,8 @@ import com.google.code.ssm.api.ParameterValueKeyProvider;
 import com.google.code.ssm.api.ReadThroughSingleCache;
 
 public abstract class CacheServiceImpl<T> extends BaseServiceImpl<T> implements BaseService<T> {
+
+    public static final Logger logger = Logger.getLogger(CacheServiceImpl.class);
 
     @Override
     @ReadThroughSingleCache(namespace = FrameConstant.CACHE_NAMESPACE, expiration = FrameConstant.CACHE_CYCLE.LONG)

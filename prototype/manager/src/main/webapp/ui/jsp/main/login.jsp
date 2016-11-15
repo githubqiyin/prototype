@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tag" prefix="t"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>

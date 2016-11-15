@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
-    private static Logger logger = Logger.getLogger(BaseServiceImpl.class);
+    public static final Logger logger = Logger.getLogger(BaseServiceImpl.class);
 
     @Override
     public void doPage(T t, Pagination<T> p) {

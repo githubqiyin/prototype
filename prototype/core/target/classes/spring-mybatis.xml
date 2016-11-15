@@ -15,7 +15,7 @@
     </typeAliases>
 
     <plugins>
-        <plugin interceptor="com.github.frame.plugin.ibatis.interceptor.PaginationInterceptor"></plugin>
+        <plugin interceptor="com.github.plugin.ibatis.interceptor.PaginationInterceptor"></plugin>
     </plugins>
 
     <mappers>

@@ -2,8 +2,11 @@ package com.github.user.model;
 
 import java.io.Serializable;
 
+import org.springframework.stereotype.Repository;
+
 import com.github.base.BaseBean;
 
+@Repository
 public class UserBean extends BaseBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
