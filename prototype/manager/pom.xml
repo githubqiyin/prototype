@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>manager</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>manager</name>
     <url>http://maven.apache.org</url>
 
