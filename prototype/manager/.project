@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>frame</project>
+		<project>core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
