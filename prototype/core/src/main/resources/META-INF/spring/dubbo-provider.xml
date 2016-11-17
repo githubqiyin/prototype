@@ -5,8 +5,5 @@
     http://code.alibabatech.com/schema/dubbo
     http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <!-- 声明服务接口 -->
-    <bean id="userService" class="com.github.user.service.impl.UserServiceImpl" />
-    <dubbo:service interface="com.github.user.service.UserService" ref="userService" />
-
+    <dubbo:annotation package="com.github" />
 </beans>

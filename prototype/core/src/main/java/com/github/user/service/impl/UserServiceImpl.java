@@ -5,15 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.base.BaseDAO;
 import com.github.base.CacheServiceImpl;
-import com.github.user.dao.UserDAO;
 import com.github.user.model.UserBean;
 import com.github.user.service.UserService;
 
 @Service
 public class UserServiceImpl extends CacheServiceImpl<UserBean> implements UserService {
-
-    @Autowired
-    private UserDAO userDAO;
 
     @Autowired
     public UserBean doQuery(UserBean t) {
@@ -23,7 +19,7 @@ public class UserServiceImpl extends CacheServiceImpl<UserBean> implements UserS
 
     @Override
     public BaseDAO<UserBean> getBaseDAO() {
-        return userDAO;
+        return null;
     }
 
 }
