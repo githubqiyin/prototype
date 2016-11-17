@@ -18,8 +18,4 @@
         <plugin interceptor="com.github.plugin.ibatis.interceptor.PaginationInterceptor"></plugin>
     </plugins>
 
-    <mappers>
-        <mapper resource="com/github/user/config/user-mapper.xml" />
-    </mappers>
-
 </configuration>

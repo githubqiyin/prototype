@@ -3,7 +3,7 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
     <appender name="INFO" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="/prototype/logs/core/info" />
+        <param name="File" value="/prototype/logs/interface/info" />
         <param name="Encoding" value="UTF-8" />
         <param name="Append" value="true" />
         <param name="DatePattern" value="'.'yyyy-MM-dd" />
@@ -17,7 +17,7 @@
     </appender>
 
     <appender name="ERROR" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="/prototype/logs/core/error" />
+        <param name="File" value="/prototype/logs/interface/error" />
         <param name="Encoding" value="UTF-8" />
         <param name="Append" value="true" />
         <param name="DatePattern" value="'.'yyyy-MM-dd" />

@@ -11,11 +11,11 @@
                         http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- 配置加载 -->
-    <context:property-placeholder ignore-unresolvable="true" location="classpath*:db.properties" />
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:db.properties" />
 
     <!-- 组件加载 -->
     <context:annotation-config />
-    <context:component-scan base-package="com.github.core">
+    <context:component-scan base-package="com.github">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
@@ -53,6 +53,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="configLocation" value="classpath:spring-mybatis.xml" />
+        <property name="mapperLocations" value="classpath:com/github/**/*-mapper.xml"></property>
     </bean>
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.github.*.**.dao"></property>
@@ -109,5 +110,5 @@
     </bean>
 
     <!-- memcache缓存 -->
-    <import resource="spring-memcached.xml" />
+    <import resource="classpath:spring-memcached.xml" />
 </beans>

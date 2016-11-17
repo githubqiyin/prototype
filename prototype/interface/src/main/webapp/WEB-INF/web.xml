@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
 
-    <display-name>core</display-name>
+    <display-name>interface</display-name>
 
     <context-param>
         <param-name>webAppRootKey</param-name>
@@ -11,7 +11,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:applications.xml;classpath:spring-mybatis.xml;classpath:dubbo.xml</param-value>
+        <param-value>classpath:applications.xml;classpath:dubbo.xml</param-value>
     </context-param>
 
     <context-param>
