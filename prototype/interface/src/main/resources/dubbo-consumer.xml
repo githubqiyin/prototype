@@ -5,5 +5,10 @@
     http://code.alibabatech.com/schema/dubbo
     http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
+    <dubbo:application name="interface" />
+
+    <dubbo:registry address="zookeeper://192.168.24.213:2181" />
+
     <dubbo:annotation package="com.github" />
+
 </beans>
