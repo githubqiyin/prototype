@@ -7,10 +7,12 @@
 
     <dubbo:application name="core" />
 
-    <dubbo:registry address="zookeeper://192.168.24.213:2181" />
+    <dubbo:registry address="zookeeper://192.168.1.122:2181" />
 
     <dubbo:protocol name="dubbo" port="20880" />
 
-    <dubbo:annotation package="com.github" />
+    <bean id="userService" class="com.github.user.service.impl.UserServiceImpl" />
+
+    <dubbo:service interface="com.github.user.service.UserService" ref="userService" />
 
 </beans>

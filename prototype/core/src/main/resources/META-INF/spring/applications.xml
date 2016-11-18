@@ -69,7 +69,7 @@
     </bean>
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="do*" propagation="REQUIRED" />
+            <tx:method name="d1*" propagation="REQUIRED" />
             <tx:method name="*" propagation="SUPPORTS" />
         </tx:attributes>
     </tx:advice>

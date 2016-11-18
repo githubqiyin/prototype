@@ -7,8 +7,7 @@
 
     <dubbo:application name="interface" />
 
-    <dubbo:registry address="zookeeper://192.168.24.213:2181" />
+    <dubbo:registry address="zookeeper://192.168.1.122:2181" />
 
-    <dubbo:annotation package="com.github" />
-
+    <dubbo:reference id="userService" interface="com.github.user.service.UserService" check="false" />
 </beans>

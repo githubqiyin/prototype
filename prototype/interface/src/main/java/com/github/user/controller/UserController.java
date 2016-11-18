@@ -1,10 +1,10 @@
 package com.github.user.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.base.BaseController;
 import com.github.base.BaseService;
@@ -15,7 +15,7 @@ import com.github.user.service.UserService;
 @RequestMapping("user")
 public class UserController extends BaseController<UserBean> {
 
-    @Reference
+    @Autowired
     private UserService userService;
 
     @RequestMapping("getUser")
