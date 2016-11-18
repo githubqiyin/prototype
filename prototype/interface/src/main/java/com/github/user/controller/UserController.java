@@ -24,6 +24,12 @@ public class UserController extends BaseController<UserBean> {
         return JSONObject.toJSONString(userService.doQuery(new UserBean()));
     }
 
+    @RequestMapping("editUser")
+    @ResponseBody
+    public String editUser(UserBean t) {
+        return JSONObject.toJSONString(userService.doEdit(new UserBean("1")));
+    }
+
     @Override
     public BaseService<UserBean> getBaseService() {
         return userService;

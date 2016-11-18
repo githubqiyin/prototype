@@ -4,22 +4,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.base.BaseDAO;
-import com.github.base.CacheServiceImpl;
+import com.github.base.BaseServiceImpl;
+import com.github.user.dao.UserDAO;
 import com.github.user.model.UserBean;
 import com.github.user.service.UserService;
 
 @Service
-public class UserServiceImpl extends CacheServiceImpl<UserBean> implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<UserBean> implements UserService {
 
     @Autowired
+    private UserDAO userDAO;
+
+    // 测试接口连通
+    @Autowired
     public UserBean doQuery(UserBean t) {
-        return new UserBean("1");
-        // return super.doFind(t);
+        return doFind(new UserBean("1"));
+    }
+
+    // 测试事务回滚
+    @Autowired
+    public int doEdit(UserBean u) {
+
+        u.setFullname("123");
+        doUpdate(u);
+
+        u.setFullname("1231333333333333333333333333312313333333333333333333333333");
+        return doUpdate(u);
     }
 
     @Override
     public BaseDAO<UserBean> getBaseDAO() {
-        return null;
+        return userDAO;
     }
 
 }

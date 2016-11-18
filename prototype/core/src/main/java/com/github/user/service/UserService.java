@@ -7,4 +7,5 @@ public interface UserService extends BaseService<UserBean> {
 
     public UserBean doQuery(UserBean t);
 
+    public int doEdit(UserBean t);
 }
